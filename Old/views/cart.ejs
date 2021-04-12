@@ -1,0 +1,47 @@
+<%- include('./includes/head.ejs') %>
+<link rel="stylesheet" href="/css/forms.css">
+<link rel="stylesheet" href="/css/product.css">
+</head>
+
+<body>
+<%- include('./includes/navigation.ejs') %>
+
+<main>
+
+        <!-- pending --> 
+        <h2>Credits availabe: 1345940168</h2>
+        <form action="https://foddsdfaosjo.xyz/orders" method="post">
+            <button type="submit">Buy</button>
+        </form>
+        <!-- pending --> 
+
+        <div class= "grid">
+
+
+        <% cartlist.forEach((item)=>{%> 
+            
+            <article class="card product-item">
+                <header class="card__header">
+                    <h1 class="product__title">
+                        <%= item.title %>
+                    </h1>
+                </header>
+                <div class="card__image">
+                    <img src="<%= item.image %>" width="50" height="150" alt="<%= item.title %>">
+                </div>
+                <div class="card__content">
+                    <h2 class="product__price">$
+                        <%= item.price %>
+                    </h2>
+                    <p class="product__description">Qt Ord:
+                        <%= item.quantity %>
+                    </p>
+                </div>
+
+            </article>
+
+        <%});%> 
+
+    </div> 
+</main>
+<%- include('./includes/end.ejs') %>
