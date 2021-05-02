@@ -1,6 +1,5 @@
 
 const pool= require('../utils/database');
-const bcrypt = require('bcryptjs');
 module.exports = class Customer{
 
     constructor( name, email, dob, phone_no, addr, passwd){

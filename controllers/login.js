@@ -1,8 +1,9 @@
 const Customer = require('../models/customer');
+const Keys = require('../private/keys');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const JWT_SECRET = 'asfjknksnfj#$%#$%!@#kjshfjkshhsdfjhasjkhj';
+const JWT_SECRET = Keys.JWT_SECRET;
 
 exports.get_login = (req,res,next) => {
 
