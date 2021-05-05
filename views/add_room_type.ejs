@@ -1,0 +1,43 @@
+<%- include('./includes/head.ejs') %>
+    <style>
+        body {
+            padding-top: 80px;
+        }
+    </style>
+    </head>
+
+    <body>
+        <%- include('./includes/navigation.ejs') %>
+        <div class="container">
+            <div class="col-sm-6 col-sm-offset-3">
+        
+                <h1><span class="fa"></span> Add Room Type</h1>
+        
+                <!-- ADD Room Type FORM -->
+                <form action="/owner/hostel/add_room_type" method="POST">
+                    <div class="form-group">
+                        <label>Enter Rent</label>
+                        <input type="text" class="form-control" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Enter Num Beds</label>
+                        <input type="text" class="form-control" name="city" required>
+                    </div>
+                    <label>AC/Non-AC:</label>
+                    <select>
+                        <option >AC</option>
+                        <option >Non-AC</option>
+                    </select>
+                    <div class="form-group">
+                        <label>Enter Room Type Photos</label>
+                        <input type="text" class="form-control" name="city" required>
+                    </div>
+        
+                    <button type="submit" class="btn btn-warning btn-lg">Add Room Type</button>
+                </form>
+        
+                <hr>
+        
+            </div>
+        </div>
+        <%- include('./includes/end.ejs') %>
