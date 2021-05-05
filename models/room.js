@@ -10,11 +10,11 @@ module.exports = class Room {
         this.available = available;
     }
 
-    async static view_rooms() {
+    async view_rooms() {
         return pool.query('SELECT * FROM room WHERE building_id = $1 AND rooms_type_id = $2;', [this.building_id, this.rooms_type_id]);
     }
 
-    async static view_room_type() {
+    async view_room_type() {
         return pool.query('SELECT * FROM rooms_type WHERE building_id = $1 ORDER BY rooms_type_id;', [this.building_id]);
     }
 
