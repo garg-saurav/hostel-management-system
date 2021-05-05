@@ -3,17 +3,14 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const Keys = require('./private/keys')
 
 const app = express();
 const port = 3000;
 const sess_name = 'sid';
 
-const SESS_SECRET = 'fasjkfhjkashfjkh$%@#$%#$DFgdfgd';
 
 const userRo = require('./routes/user');
-// // const pool =  require('./utils/database');
-// // const prodsRo = require('./routes/prod');
-// // const cartRo = require('./routes/cart');
 
 
 app.set('view engine', 'ejs');
@@ -25,7 +22,7 @@ app.use(session({
     name: sess_name,
     resave: false,
     saveUninitialized: false,
-    secret: SESS_SECRET,
+    secret: Keys.SESS_SECRET,
     cookie: {
     }
 }));
