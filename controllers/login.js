@@ -25,13 +25,13 @@ exports.post_auth = async (req, res, next) => {
             customer = new Customer(null, email, null, null, null, passwd);    
             const user = await customer.find_user();
             if(user.rowCount==0){
-                return res.send('<script>alert("Invalid username/password"); window.location.href = "/user/login";</script>');
+                res.send('<script>alert("Invalid username/password"); window.location.href = "/user/login";</script>');
             }else if(await bcrypt.compare(passwd, user.rows[0].passwd)){
                 const token = jwt.sign({email:email, role:role}, JWT_SECRET);
                 req.session.jwtoken = token;
-                return res.redirect('/user/profile');
+                res.redirect('/user/profile');
             }else{
-                return res.send('<script>alert("Invalid username/password"); window.location.href = "/user/login";</script>');
+                res.send('<script>alert("Invalid username/password"); window.location.href = "/user/login";</script>');
             }
         }else{
             // fill later

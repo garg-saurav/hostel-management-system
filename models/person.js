@@ -7,7 +7,7 @@ module.exports = class Person{
     }
 
     async get_user(){
-        return pool.query("SELECT name, email_id, TO_CHAR(dob, 'dd/mm/yyyy') as dob, phone_number, addr FROM person WHERE email_id=$1",[this.email]);
+        return pool.query("SELECT person_id as id, name, email_id, TO_CHAR(dob, 'dd/mm/yyyy') as dob, phone_number, addr FROM person WHERE email_id=$1",[this.email]);
     }
 
 };
