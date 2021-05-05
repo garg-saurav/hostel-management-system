@@ -1,42 +1,50 @@
-const Owner = require('../models/customer');
-const Keys = require('../private/keys');
-const jwt = require('jsonwebtoken');
+const Hostel = require('../models/hostel');
 const Person = require('../models/person');
-
-const JWT_SECRET = Keys.JWT_SECRET;
+const verify = require('../private/verify');
 
 exports.get_add_hostel = async (req, res, next) => {
-    try {
-        if (req.session.jwtoken) {
-            let decoded;
-            try {
-                decoded = jwt.verify(req.session.jwtoken, JWT_SECRET);
-            } catch (e) { // token verification failed
-                req.session.jwtoken = null;
-                return res.send('<script>alert("Please login first"); window.location.href = "/user/login";</script>');
-            }
-            person = new Person(decoded.email);
-            const user = await person.get_user();
-            if (user.rowCount == 0) {
-                return res.send('<script>alert("Details not found"); window.location.href = "/user/login";</script>');
-            } else {
-                res.render('add_hostel', {
-                    pageTitle: 'Add Hostel',
-                    path: '/owner/add_hostel',
-                    services: []
-                });
-            }
+    const decoded = verify.authenticate(req);
+    if (decoded) {
+        person = new Person(decoded.email);
+        const user = await person.get_user();
+        if (user.rowCount == 0) {
+            res.send('<script>alert("Details not found"); window.location.href = "/user/login";</script>');
         } else {
-            return res.send('<script>alert("Please login first"); window.location.href = "/user/login";</script>');
+            res.render('add_hostel', {
+                pageTitle: 'Add Hostel',
+                path: '/owner/add_hostel',
+                services: []
+            });
         }
-    } catch (e) {
-        throw (e);
     }
-
+    else {
+        res.send('<script>alert("Please login first"); window.location.href = "/user/login";</script>');
+    }
 }
 
 exports.post_add_hostel = async (req, res, next) => {
     const name = req.body.name;
     const city = req.body.city;
+    const addr = req.body.address;
+    const additional = req.body.additional;
     const services = req.body.services;
+    const photos = req.body.photos;
+
+    const decoded = verify.authenticate(req)
+
+    if (decoded) {
+        const person = new Person(decoded.email);
+        const user = await person.get_user();
+        if (user.rowCount == 0) {
+            res.send('<script>alert("Details not found"); window.location.href = "/user/login";</script>');
+        } else {
+            const hostel = new Hostel(name, city, user.rows[0].id, addr, additional, services, photos);
+            await hostel.add_hostel_request();
+            res.redirect('/owner/profile');
+            // TODO - redirect to /owner/hostel_request
+        }
+    }
+    else {
+        res.send('<script>alert("Please login first"); window.location.href = "/owner/login";</script>');
+    }
 }

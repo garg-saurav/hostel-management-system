@@ -12,6 +12,7 @@ const sess_name = 'sid';
 
 const userRo = require('./routes/user');
 const customerRo = require('./routes/customer');
+const ownerRo = require('./routes/owner');
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
@@ -34,6 +35,7 @@ app.get('/', (req, res) => {
 app.use('/user', userRo);
 app.use('/customer', customerRo);
 
+app.use('/owner', ownerRo);
 
 app.listen(port, () => {
     console.log(`App listening at http://localhost:${port}`)
