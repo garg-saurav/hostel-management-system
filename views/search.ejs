@@ -1,0 +1,64 @@
+<%- include('./includes/head.ejs') %>
+</head>
+
+<body>
+<%- include('./includes/navigation.ejs') %>
+<div class="container">
+<div class="col-sm-8 col-sm-offset-3">
+    <br><br>
+
+    <h1></span> Search Rooms</h1>
+
+    <!-- SEARCH FORM -->
+    <form action="/customer" method="post">
+        
+        <div class="form-group">
+            <label>Address</label>
+            <input type="text" class="form-control" name="address" required>
+        </div>
+        <div class="form-group">
+            <label>Check in Date</label>
+            <input type="date" class="form-control" name="check_in_date" required>
+        </div>
+        <div class="form-group">
+            <label>Check out Date</label>
+            <input type="date" class="form-control" name="check_out_date" required>
+        </div>
+        <div class="form-group">
+            <label>Number of beds</label>
+            <input type="number" class="form-control" name="num_beds" required>
+        </div>
+        <div class="form-group">
+            <label>Minimum Rent</label>
+            <input type="number" class="form-control" name="min_rent" required>
+        </div>
+        <div class="form-group">
+            <label>Maximum Rent</label>
+            <input type="number" class="form-control" name="max_rent" required>
+        </div>
+        <div class="form-group">
+            <label>AC or Non-AC</label>
+            <select name="air_conditioning">
+                <option value="ac">AC</option>
+                <option value="non_ac">Non-AC</option>
+            </select>
+        </div>
+        <!-- <div class="radio-inline">
+            <label><input type="radio" name="role" value="customer" id="customer" checked>Customer</label>
+        </div>
+        <div class="radio-inline">
+            <label><input type="radio" name="role" value="hostel_owner" id="hostel_owner">Hostel Owner</label>
+        </div> -->
+        <br><br>
+        
+
+        <button type="submit" class="btn btn-warning btn-lg">Search</button>
+    </form>
+
+    <hr>
+
+    <!-- <p>Already have an account? <a href="/user/login">Login</a></p> -->
+
+</div>
+</div>
+<%- include('./includes/end.ejs') %> 
