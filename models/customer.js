@@ -29,4 +29,14 @@ module.exports = class Customer{
         }
     }
 
+    async get_bookings(){
+        try{
+            const res = await pool.query('SELECT person_id FROM person WHERE email_id=$1',[this.email]);
+            const id = res.rows[0].person_id;
+            return pool.query("SELECT building_id, booking_id, rooms_type_id, customer_id, cancelled, rating, review, building_name, city, addr, TO_CHAR(start_date, 'dd/mm/yyyy') as start_date, TO_CHAR(end_date, 'dd/mm/yyyy') as end_date FROM booking NATURAL JOIN building WHERE customer_id=$1 ORDER BY start_date DESC, end_date DESC;",[id]);
+        }catch(e){
+            throw e;
+        }
+    }
+
 };

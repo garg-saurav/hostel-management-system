@@ -27,7 +27,7 @@ exports.post_auth = async (req, res, next) => {
             if(user.rowCount==0){
                 res.send('<script>alert("Invalid username/password"); window.location.href = "/user/login";</script>');
             }else if(await bcrypt.compare(passwd, user.rows[0].passwd)){
-                const token = jwt.sign({email:email}, JWT_SECRET);
+                const token = jwt.sign({email:email, role:role}, JWT_SECRET);
                 req.session.jwtoken = token;
                 res.redirect('/user/profile');
             }else{
