@@ -6,7 +6,7 @@ const Search = require('../models/search');
 
 const JWT_SECRET = Keys.JWT_SECRET;
 
-exports.get_search = async (req, res, next) => {
+exports.get_results = async (req, res, next) => {
 
     try {
         if (req.session.jwtoken) {
