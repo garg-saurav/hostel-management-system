@@ -11,9 +11,8 @@ module.exports = class Room {
         this.available = available;
     }
 
-    async get_hostel_name() {
-        const hostel = new Hostel(this.building_id, null, null, null, null, null, null, null);
-        return hostel.get_hostel();
+    async get_roomtype_details() {
+        return pool.query('SELECT building_name AS name, rent, num_beds, ac FROM rooms_type JOIN building ON rooms_type.building_id = building.building_id WHERE rooms_type.building_id = $1 AND rooms_type_id = $2;', [this.building_id, this.rooms_type_id]);
     }
 
     async get_rooms() {
@@ -25,7 +24,15 @@ module.exports = class Room {
     }
 
     async add_room() {
-        return  await pool.query('INSERT INTO room(building_id, rooms_type_id, room_no, available) VALUES($1, $2, $3, $4);', [this.building_id, this.rooms_type_id, this.room_no, true]);
+        try {
+            await pool.query('BEGIN;');
+            await pool.query('INSERT INTO room(building_id, rooms_type_id, room_no, available) VALUES($1, $2, $3, $4);', [this.building_id, this.rooms_type_id, this.room_no, true]);
+            await pool.query('COMMIT;');
+        }
+        catch (e) {
+            await pool.query('ROLLBACK;');
+            throw e;
+        }
     }
 
     async add_room_type() {

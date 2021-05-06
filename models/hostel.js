@@ -12,10 +12,6 @@ module.exports = class Hostel {
         this.photos = photos;
     }
 
-    async get_hostel() {
-        return pool.query('SELECT building_name AS name FROM building WHERE building_id=$1', [this.building_id]);
-    }
-
     async add_hostel_request() {
         try {
             await pool.query('BEGIN;');

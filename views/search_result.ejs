@@ -9,7 +9,9 @@
         <hr>
           <h3 class="text-center">Search Results</h3>
           <hr>
-          <div style="overflow-x: hidden;
+          <div style="padding-bottom: 20px;
+              max-height: 70vh;
+              overflow-x: hidden;
               overflow-y: auto;
               text-align:justify;">
 
@@ -17,11 +19,12 @@
                 <br><h5>No hostel found!</h5>
               <% }%>
               
-              <% hostels.forEach((item)=>{%>  
+              <% hostels.forEach((item)=>{%>
+                <div class="card">
                   <div class="card-body">
                     <h5 class="card-title"><%=item.building_name%>
                     
-                      <form action="/search_results" method="POST">
+                      <form action="/customer/search_results" method="POST">
                         <input name="building_id" type="hidden" value="<%=item.building_id%>">
                         <input name="rooms_type_id" type="hidden" value="<%=item.rooms_type_id%>">
                         <input name="check_in_date" type="hidden" value="<%=item.check_in_date%>">
@@ -41,10 +44,11 @@
                       max-width: 100ch;">About: <%=item.additional_info%></span>
                         <%}%>
                       </div><br>
-                </div>
+                    </div>
+                
                 <br>
               <%});%> 
-              
+              </div>
         </div>
     </div>
 	
