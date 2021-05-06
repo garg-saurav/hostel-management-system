@@ -21,17 +21,17 @@ module.exports = class Search {
             const p1 = 77;
             const p2 = 28;
             return pool.query(`WITH rtype(building_id, rooms_type_id) AS
-                (SELECT building_id, rooms_type_id
+                (SELECT building_id, rooms_type_id, rent
                 FROM rooms_type
                 WHERE num_beds=$1 AND ac = $2 AND rent>= $3 AND rent <= $4),
                 r_not_aval(bid,rno) AS
                 (SELECT building_id, room_no
                 FROM booking NATURAL JOIN rtype
                 WHERE (not (end_date<$5 OR start_date > $6)) AND cancelled <> True)
-                SELECT DISTINCT building_id, building_name, addr, rooms_type_id, COUNT(room_no) AS num_rooms, additional_info
+                SELECT DISTINCT building_id, building_name, addr, rooms_type_id, rent, COUNT(room_no) AS num_rooms, additional_info
                 FROM building NATURAL JOIN room NATURAL JOIN rtype
                 WHERE (building_id,room_no) NOT IN (SELECT * FROM r_not_aval) AND available = True
-                GROUP BY (building_id, rooms_type_id );`
+                GROUP BY (building_id, rooms_type_id, rent);`
                 // ORDER BY location_point <-> 'SRID=4326; POINT($7 $8)';`
                 // , [this.num_beds, this.AC, this.min_rent, this.max_rent, this.check_in_date, this.check_out_date, p1, p2]);
             , [this.num_beds, this.AC, this.min_rent, this.max_rent, this.check_in_date, this.check_out_date]);
