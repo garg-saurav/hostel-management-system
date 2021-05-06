@@ -2,7 +2,6 @@ const Customer = require('../models/customer');
 const Keys = require('../private/keys');
 const jwt = require('jsonwebtoken');
 const Person = require('../models/person');
-const Booking = require('../models/booking')
 const verify = require('../private/verify');
 
 const JWT_SECRET = Keys.JWT_SECRET;
@@ -29,6 +28,8 @@ exports.get_profile = async (req, res, next) => {
                     addr: user.rows[0].addr,
                     bookings: user_bookings.rows,
                     numbookings: user_bookings.rowCount,
+                    has_ended: user_bookings.has_ended,
+                    has_started: user_bookings.has_started,
                 });
             }
         }
@@ -48,21 +49,8 @@ exports.post_booking = async (req, res, next) => {
                 req.session.jwtoken = null;
                 return res.send('<script>alert("Please login first"); window.location.href = "/user/login";</script>');
             }
-            booking = new Booking(req.body.booking_id);
-            const details = await booking.get_all_details();
-            const pics = await booking.get_photos();
-            if(details.rowCount==0){
-                // return res.send('<script>alert("Details not found"); window.location.href = "/user/login";</script>');
-            }else{
-                if(decoded.role=='customer'){
-                    res.render('bookingdetails', {
-                        pageTitle: 'Booking Details',
-                        path: '/bookingdetails',
-                        info: details.rows[0],
-                        pics: pics.rows,
-                    });
-                }
-            }
+            var string = encodeURIComponent(req.body.booking_id);
+            res.redirect('/bookingdetails/?id='+string);
         }else{
             return res.send('<script>alert("Please login first"); window.location.href = "/user/login";</script>');
         }

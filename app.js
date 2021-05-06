@@ -29,7 +29,8 @@ app.use(session({
 
 app.get('/', (req, res) => {
     res.redirect("/user/login");
-  });
+});
+
 
 app.use('/user', userRo);
 app.use('/owner', ownerRo);

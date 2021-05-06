@@ -65,7 +65,8 @@
           <hr>
           <h3 class="text-center">Your bookings</h3>
           <hr>
-          <div style="height: 280px;
+          <div style="padding-bottom: 20px;
+              max-height: 50vh;
               overflow-x: hidden;
               overflow-y: auto;
               text-align:justify;">
@@ -91,10 +92,10 @@
                   </h5>
                     <p><%=item.start_date%> - <%=item.end_date%></p>
                     <p><%=item.addr%></p>
-                    <%if(item.rating){%>
+                    <%if(item.rating && item.has_started){%>
                     <p>Your Rating: <%=item.rating%></p>
                       <%}%>
-                    <%if(item.review){%>
+                    <%if(item.review && item.has_started){%>
                       <span style="display:inline-block;
                       white-space: nowrap;
                       overflow: hidden;
