@@ -9,10 +9,7 @@ const app = express();
 const port = 3000;
 const sess_name = 'sid';
 
-
-const userRo = require('./routes/user');
-const customerRo = require('./routes/customer');
-const ownerRo = require('./routes/owner');
+const router = require('./routes/');
 
 app.set('view engine', 'ejs');
 app.set('views', 'views');
@@ -29,13 +26,10 @@ app.use(session({
 }));
 
 app.get('/', (req, res) => {
-    res.redirect("/user/login");
+    res.redirect("/login");
   });
 
-app.use('/user', userRo);
-app.use('/customer', customerRo);
-
-app.use('/owner', ownerRo);
+app.use('/', router);
 
 app.listen(port, () => {
     console.log(`App listening at http://localhost:${port}`)
