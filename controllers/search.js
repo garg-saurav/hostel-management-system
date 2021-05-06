@@ -59,19 +59,15 @@ exports.post_search = async (req, res, next) => {
             else {
                 AC = 'false';
             }
-            hostel_search = new Search(address, check_in_date, check_out_date, num_beds, min_rent, max_rent, AC);
-            // console.log(hostel_search);
-            hostels_res = await hostel_search.get_hostels(); //row= building_id, building_name, addr, rooms_type_id
-            // console.log(hostels);
-            // res.render('search_result', {
-            //     pageTitle: 'Search Result',
-            //     path: '/search_result',
-            //     hostels: hostels_res.rows,
-            //     check_in_date: check_in_date,
-            //     check_out_date: check_out_date,
-            //     num_hostels: hostels_res.rowCount,
-            // });
-            //redirect to search_result ka get function with the data
+            var addr_st = encodeURIComponent(address);
+            var check_in_date_st = encodeURIComponent(check_in_date);
+            var check_out_date_st = encodeURIComponent(check_out_date);
+            var num_beds_st = encodeURIComponent(num_beds);
+            var min_rent_st = encodeURIComponent(min_rent);
+            var max_rent_st = encodeURIComponent(max_rent);
+            var AC_st = encodeURIComponent(AC);
+            res.redirect('/customer/search_results/?address=' +addr_st+'&check_in_date='+check_in_date_st+'&check_out_date='+check_out_date_st+'&num_beds='+num_beds_st+'&min_rent='+min_rent_st+'&max_rent='+max_rent_st+'&AC='+AC_st);
+            
 
         } else {
             return res.send('<script>alert("Please login first"); window.location.href = "/login";</script>');

@@ -4,11 +4,12 @@
     <body>
         <%- include('./includes/navigation.ejs') %>
             <div class="container">
-                <div class="row col-sm-12">
-                    <div class="col-sm card">
-                        <form method="POST">
+                <form method="POST">
+                    <div class="row col-sm-12">
+                        <div class="col-sm card">
                             <div class="row">
                                 <input id="building_id" type="hidden" value="<%= id %>">
+                                <input id="rooms_type_id" type="hidden" value="<%= rooms_type %>">
                                 <div class="col-sm">
                                     <h6>Hostel</h6>
                                 </div>
@@ -45,10 +46,12 @@
                                     </h6>
                                 </div>
                             </div>
-                        </form>
+                        </div>
+                        <div class="col-sm">
+                            <button type="submit" class="btn btn-warning btn-lg">Add Room</button>
+                        </div>
                     </div>
-                    <div class="col-sm"></div>
-                </div>
+                </form>
             </div>
 
             <%- include('./includes/end.ejs') %>
