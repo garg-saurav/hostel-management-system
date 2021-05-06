@@ -1,13 +1,13 @@
 const express = require('express');
 
-const viewRoom = require('../controllers/view_room');
+const viewRoomType = require('../controllers/view_room_type');
 const searchCon = require('../controllers/search');
 const searchResultCon = require('../controllers/search_results');
 const bookingDetailsCon = require('../controllers/bookingdetails');
 
 const router = express.Router();
 
-router.get('/view_room', viewRoom.view_rooms);
+router.get('/:building_id/:rooms_type_id', viewRoomType.view_rooms);
 router.get('/', searchCon.get_search);
 router.post('/', searchCon.post_search);
 // router.get('/search_results', searchResultCon.get_results);
