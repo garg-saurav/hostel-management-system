@@ -15,7 +15,7 @@ exports.get_results = async (req, res, next) => {
                 decoded = jwt.verify(req.session.jwtoken, JWT_SECRET);
             } catch (e) { // token verification failed
                 req.session.jwtoken = null;
-                return res.send('<script>alert("Please login first"); window.location.href = "/user/login";</script>');
+                return res.send('<script>alert("Please login first"); window.location.href = "/login";</script>');
             }
 
 
@@ -25,7 +25,7 @@ exports.get_results = async (req, res, next) => {
             });
 
         } else {
-            return res.send('<script>alert("Please login first"); window.location.href = "/user/login";</script>');
+            return res.send('<script>alert("Please login first"); window.location.href = "/login";</script>');
         }
     } catch (e) {
         throw (e);
@@ -43,7 +43,7 @@ exports.post_results = async (req, res, next) => {
                 decoded = jwt.verify(req.session.jwtoken, JWT_SECRET);
             } catch (e) { // token verification failed
                 req.session.jwtoken = null;
-                return res.send('<script>alert("Please login first"); window.location.href = "/user/login";</script>');
+                return res.send('<script>alert("Please login first"); window.location.href = "/login";</script>');
             }
 
             const building_id = req.body.building_id;
@@ -66,7 +66,7 @@ exports.post_results = async (req, res, next) => {
             // redirect to search_result ka get function with the data
 
         } else {
-            return res.send('<script>alert("Please login first"); window.location.href = "/user/login";</script>');
+            return res.send('<script>alert("Please login first"); window.location.href = "/login";</script>');
         }
     } catch (e) {
         throw (e);

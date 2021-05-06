@@ -15,7 +15,7 @@ exports.get_search = async (req, res, next) => {
                 decoded = jwt.verify(req.session.jwtoken, JWT_SECRET);
             } catch (e) { // token verification failed
                 req.session.jwtoken = null;
-                return res.send('<script>alert("Please login first"); window.location.href = "/user/login";</script>');
+                return res.send('<script>alert("Please login first"); window.location.href = "/login";</script>');
             }
 
             
@@ -25,7 +25,7 @@ exports.get_search = async (req, res, next) => {
             });
             
         } else {
-            return res.send('<script>alert("Please login first"); window.location.href = "/user/login";</script>');
+            return res.send('<script>alert("Please login first"); window.location.href = "/login";</script>');
         }
     } catch (e) {
         throw (e);
@@ -43,7 +43,7 @@ exports.post_search = async (req, res, next) => {
                 decoded = jwt.verify(req.session.jwtoken, JWT_SECRET);
             } catch (e) { // token verification failed
                 req.session.jwtoken = null;
-                return res.send('<script>alert("Please login first"); window.location.href = "/user/login";</script>');
+                return res.send('<script>alert("Please login first"); window.location.href = "/login";</script>');
             }
             const address = req.body.address;
             const check_in_date = req.body.check_in_date;
@@ -74,7 +74,7 @@ exports.post_search = async (req, res, next) => {
             //redirect to search_result ka get function with the data
 
         } else {
-            return res.send('<script>alert("Please login first"); window.location.href = "/user/login";</script>');
+            return res.send('<script>alert("Please login first"); window.location.href = "/login";</script>');
         }
     } catch (e) {
         throw (e);
