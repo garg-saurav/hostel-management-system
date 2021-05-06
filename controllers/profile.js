@@ -8,14 +8,14 @@ const JWT_SECRET = Keys.JWT_SECRET;
 
 exports.get_profile = async (req, res, next) => {
 
-    const decoded = verify.authenticate(req);    
-    if(decoded){
+    const decoded = verify.authenticate(req);
+    if (decoded) {
         person = new Person(decoded.email);
         const user = await person.get_user();
-        if(user.rowCount==0){
-            res.send('<script>alert("Details not found"); window.location.href = "/user/login";</script>');
-        }else{
-            if(decoded.role=='customer'){
+        if (user.rowCount == 0) {
+            res.send('<script>alert("Details not found"); window.location.href = "/login";</script>');
+        } else {
+            if (decoded.role == 'customer') {
                 customer = new Customer(null, user.rows[0].email_id, null, null, null, null);
                 const user_bookings = await customer.get_bookings();
                 res.render('userprofile', {
@@ -33,29 +33,29 @@ exports.get_profile = async (req, res, next) => {
                 });
             }
         }
-    }else{
-        res.send('<script>alert("Please login first"); window.location.href = "/user/login";</script>');
+    } else {
+        res.send('<script>alert("Please login first"); window.location.href = "/login";</script>');
     }
 };
 
 exports.post_booking = async (req, res, next) => {
-    
-    try{
-        if(req.session.jwtoken){
+
+    try {
+        if (req.session.jwtoken) {
             let decoded;
-            try{
+            try {
                 decoded = jwt.verify(req.session.jwtoken, JWT_SECRET);
-            }catch(e){ // token verification failed
+            } catch (e) { // token verification failed
                 req.session.jwtoken = null;
-                return res.send('<script>alert("Please login first"); window.location.href = "/user/login";</script>');
+                return res.send('<script>alert("Please login first"); window.location.href = "/login";</script>');
             }
             var string = encodeURIComponent(req.body.booking_id);
-            res.redirect('/bookingdetails/?id='+string);
+            res.redirect('/customer/bookingdetails/?id='+string);
         }else{
-            return res.send('<script>alert("Please login first"); window.location.href = "/user/login";</script>');
+            return res.send('<script>alert("Please login first"); window.location.href = "/login";</script>');
         }
-    }catch(e){
-        throw(e);
+    } catch (e) {
+        throw (e);
     }
 
 }

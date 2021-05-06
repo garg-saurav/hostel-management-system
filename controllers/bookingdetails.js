@@ -1,7 +1,7 @@
 const verify = require('../private/verify');
 const Booking = require('../models/booking');
 
-exports.get_profile = async (req, res, next) => {
+exports.get_bookingdetails = async (req, res, next) => {
 
     const decoded = verify.authenticate(req);
     if(decoded){
@@ -10,7 +10,7 @@ exports.get_profile = async (req, res, next) => {
         const details = await booking.get_all_details();
         const pics = await booking.get_photos();
         if(details.rowCount==0){
-            return res.send('<script>alert("Details not found"); window.location.href = "/user/login";</script>');
+            return res.send('<script>alert("Details not found"); window.location.href = "/login";</script>');
         }else{
             if(decoded.role=='customer'){
                 res.render('bookingdetails', {
@@ -22,7 +22,7 @@ exports.get_profile = async (req, res, next) => {
             }
         }
     }else{
-        return res.send('<script>alert("Please login first"); window.location.href = "/user/login";</script>');
+        return res.send('<script>alert("Please login first"); window.location.href = "/login";</script>');
     }
 };
 

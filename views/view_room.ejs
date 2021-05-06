@@ -1,0 +1,54 @@
+<%- include('./includes/head.ejs') %>
+    </head>
+
+    <body>
+        <%- include('./includes/navigation.ejs') %>
+            <div class="container">
+                <div class="row col-sm-12">
+                    <div class="col-sm card">
+                        <form method="POST">
+                            <div class="row">
+                                <input id="building_id" type="hidden" value="<%= id %>">
+                                <div class="col-sm">
+                                    <h6>Hostel</h6>
+                                </div>
+                                <div class="col-sm text-secondary">
+                                    <h6 id="name">
+                                        <%= name %>
+                                    </h6>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm">
+                                    <h6>Rent</h6>
+                                </div>
+                                <div class="col-sm text-secondary">
+                                    <h6>
+                                        <%= rent %>
+                                    </h6>
+                                </div>
+                                <div class="col-sm">
+                                    <h6>Beds</h6>
+                                </div>
+                                <div class="col-sm text-secondary">
+                                    <h6>
+                                        <%= num_beds %>
+                                    </h6>
+                                </div>
+                                <div class="col-sm">
+                                    <h6>AC</h6>
+                                </div>
+                                <div class="col-sm text-secondary">
+                                    <h6>
+                                        <%= ac %>
+                                    </h6>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-sm"></div>
+                </div>
+            </div>
+
+            <%- include('./includes/end.ejs') %>
