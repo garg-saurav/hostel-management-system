@@ -8,17 +8,16 @@ exports.get_add_hostel = async (req, res, next) => {
         person = new Person(decoded.email);
         const user = await person.get_user();
         if (user.rowCount == 0) {
-            res.send('<script>alert("Details not found"); window.location.href = "/user/login";</script>');
+            res.send('<script>alert("Details not found"); window.location.href = "/login";</script>');
         } else {
             res.render('add_hostel', {
                 pageTitle: 'Add Hostel',
-                path: '/owner/add_hostel',
                 services: []
             });
         }
     }
     else {
-        res.send('<script>alert("Please login first"); window.location.href = "/user/login";</script>');
+        res.send('<script>alert("Please login first"); window.location.href = "/login";</script>');
     }
 }
 
@@ -30,15 +29,15 @@ exports.post_add_hostel = async (req, res, next) => {
     const services = req.body.services;
     const photos = req.body.photos;
 
-    const decoded = verify.authenticate(req)
+    const decoded = verify.authenticate(req);
 
     if (decoded) {
         const person = new Person(decoded.email);
         const user = await person.get_user();
         if (user.rowCount == 0) {
-            res.send('<script>alert("Details not found"); window.location.href = "/user/login";</script>');
+            res.send('<script>alert("Details not found"); window.location.href = "/login";</script>');
         } else {
-            const hostel = new Hostel(name, city, user.rows[0].id, addr, additional, services, photos);
+            const hostel = new Hostel(null, name, city, user.rows[0].id, addr, additional, services, photos);
             await hostel.add_hostel_request();
             res.redirect('/owner/profile');
             // TODO - redirect to /owner/hostel_request

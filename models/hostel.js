@@ -1,7 +1,8 @@
 const pool = require('../utils/database');
 module.exports = class Hostel {
 
-    constructor(name, city, owner_id, address, additional, services, photos) {
+    constructor(building_id, name, city, owner_id, address, additional, services, photos) {
+        this.building_id = building_id;
         this.name = name;
         this.city = city;
         this.owner_id = owner_id;
@@ -9,6 +10,10 @@ module.exports = class Hostel {
         this.additional = additional;
         this.services = services;
         this.photos = photos;
+    }
+
+    async get_hostel() {
+        return pool.query('SELECT building_name AS name FROM building WHERE building_id=$1', [this.building_id]);
     }
 
     async add_hostel_request() {

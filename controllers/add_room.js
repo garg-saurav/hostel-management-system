@@ -15,26 +15,26 @@ exports.get_add_room = async (req, res, next) => {
                 decoded = jwt.verify(req.session.jwtoken, JWT_SECRET);
             } catch (e) { // token verification failed
                 req.session.jwtoken = null;
-                return res.send('<script>alert("Please login first"); window.location.href = "/user/login";</script>');
+                return res.send('<script>alert("Please login first"); window.location.href = "/login";</script>');
             }
             person = new Person(decoded.email);
             const user = await person.get_user();
             if (user.rowCount == 0) {
-                return res.send('<script>alert("Details not found"); window.location.href = "/user/login";</script>');
+                return res.send('<script>alert("Details not found"); window.location.href = "/login";</script>');
             } else {
-                Room.view_room_type().then(x=> {
+                Room.view_room_type().then(x => {
                     res.render('add_room', {
                         pageTitle: 'Add Room',
                         path: '/room/add_room',
                         services: [],
                         room_type: x.rows
                     }
-                    //console.log(x.rows)
+                        //console.log(x.rows)
                     )
                 });
             }
         } else {
-            return res.send('<script>alert("Please login first"); window.location.href = "/user/login";</script>');
+            return res.send('<script>alert("Please login first"); window.location.href = "/login";</script>');
         }
     } catch (e) {
         throw (e);
@@ -57,7 +57,7 @@ exports.post_add_room = async (req, res, next) => {
         const person = new Person(decoded.email);
         const user = await person.get_user();
         if (user.rowCount == 0) {
-            res.send('<script>alert("Details not found"); window.location.href = "/user/login";</script>');
+            res.send('<script>alert("Details not found"); window.location.href = "/login";</script>');
         } else {
             const room = new Room(building_id, rooms_type_id, rent, num_beds, ac, room_no, available);
             await hostel.add_room();
