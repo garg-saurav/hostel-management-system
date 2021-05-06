@@ -43,6 +43,7 @@ exports.get_add_room = async (req, res, next) => {
 }
 
 exports.post_add_room = async (req, res, next) => {
+    const building_id = req.body.building_id;
     const rooms_type_id = req.body.rooms_type_id;
     const rent = req.body.rent;
     const num_beds = req.body.num_beds;
