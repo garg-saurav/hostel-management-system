@@ -15,6 +15,20 @@ module.exports = class Customer{
         return pool.query('SELECT * FROM person NATURAL JOIN customer WHERE email_id=$1',[this.email]);
     }
 
+    async reg_as_hostel_owner(){
+        try{
+            await pool.query('BEGIN;');
+            const res = await pool.query('SELECT * FROM person NATURAL JOIN customer WHERE email_id=$1;',[this.email]);
+            const id = res.rows[0].person_id;
+            const passwd = res.rows[0].passwd;
+            await pool.query('INSERT INTO hostel_owner VALUES ($1, $2);',[id, passwd]);
+            await pool.query('COMMIT;')
+        }catch(e){
+            await pool.query('ROLLBACK;');
+            throw e;
+        }
+    }
+
     async add_user(){
         try{
             await pool.query('BEGIN;');
@@ -34,6 +48,16 @@ module.exports = class Customer{
             const res = await pool.query('SELECT person_id FROM person WHERE email_id=$1',[this.email]);
             const id = res.rows[0].person_id;
             return pool.query("SELECT building_id, booking_id, rooms_type_id, customer_id, cancelled, rating, review, building_name, city, addr, TO_CHAR(start_date, 'dd/mm/yyyy') as start_date, TO_CHAR(end_date, 'dd/mm/yyyy') as end_date, start_date<NOW() as has_started, end_date<NOW() as has_ended FROM booking NATURAL JOIN building WHERE customer_id=$1 ORDER BY start_date DESC, end_date DESC;",[id]);
+        }catch(e){
+            throw e;
+        }
+    }
+
+    async is_an_owner(){
+        try{
+            const res = await pool.query('SELECT * FROM person NATURAL JOIN customer WHERE email_id=$1;',[this.email]);
+            const id = res.rows[0].person_id;
+            return pool.query('SELECT * FROM hostel_owner WHERE person_id=$1;',[id]);
         }catch(e){
             throw e;
         }
