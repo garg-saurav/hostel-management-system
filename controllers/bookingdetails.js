@@ -7,6 +7,10 @@ exports.get_bookingdetails = async (req, res, next) => {
     if(decoded){
         var bookingid = req.query.id;
         booking = new Booking(bookingid);
+        const cust_email = await booking.get_customer_email();
+        if(cust_email.rowCount==0 || cust_email.rows[0].email_id!=decoded.email){
+            return res.send('<script>alert("Details not found"); window.location.href = "/profile";</script>');
+        }
         const details = await booking.get_all_details();
         const pics = await booking.get_photos();
         if(details.rowCount==0){

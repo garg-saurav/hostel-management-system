@@ -1,4 +1,5 @@
 const Customer = require('../models/customer');
+const Owner = require('../models/owner');
 const Keys = require('../private/keys');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -33,9 +34,31 @@ exports.post_auth = async (req, res, next) => {
             } else {
                 res.send('<script>alert("Invalid username/password"); window.location.href = "/login";</script>');
             }
+        } else if (role=="hostel_owner"){
+            owner = new Owner(null, email, null, null, null, passwd);
+            const user = await owner.find_user();
+            if (user.rowCount == 0) {
+                res.send('<script>alert("Invalid username/password"); window.location.href = "/login";</script>');
+            } else if (await bcrypt.compare(passwd, user.rows[0].passwd)) {
+                const token = jwt.sign({ email: email, role: role }, JWT_SECRET);
+                req.session.jwtoken = token;
+                res.redirect('/profile');
+            } else {
+                res.send('<script>alert("Invalid username/password"); window.location.href = "/login";</script>');
+            }
         } else {
-            // fill later
+            // can't reach here
         }
+    } catch (e) {
+        throw e;
+    }
+}
+
+exports.post_logout = (req, res, next) => {
+
+    try {
+        req.session.destroy();
+        res.send('<script>alert("Logged out!"); window.location.href = "/login";</script>');
     } catch (e) {
         throw e;
     }
