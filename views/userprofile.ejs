@@ -7,9 +7,17 @@
       <br>
       <div class="container">
         <div class="main-body">
+          <form action="/logout" method="POST">
+            <input type="submit" class="btn btn-danger float-right" value="Logout"/>
+          </form>
+          <%if(!has_other_role){%>
+            <form action="/reguser" method="POST">
+              <input type="submit" class="btn btn-primary float-right" style="margin-right: 10px;" value="Register as hostel owner"></input><br><br>
+            </form>
+          <%}%>
           <div class="row gutters-sm">
             <div class="col-md-4 mb-3">
-              <div class="card">
+              <div class="card">        
                 <div class="card-body">
                   <div class="d-flex flex-column align-items-center text-center">
                     <img style="border-radius: 30%;" src="https://bootdey.com/img/Content/avatar/avatar7.png"

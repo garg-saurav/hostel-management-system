@@ -20,4 +20,14 @@ module.exports = class Booking{
         }
     }
 
+    async get_customer_email(){
+        try{
+            const res = await pool.query('SELECT customer_id FROM booking WHERE booking_id=$1;',[this.booking_id]);
+            const cust_id = res.rows[0].customer_id;
+            return pool.query('SELECT email_id FROM person WHERE person_id = $1;',[cust_id]);
+        }catch(e){
+            throw e;
+        }
+    }
+
 };
