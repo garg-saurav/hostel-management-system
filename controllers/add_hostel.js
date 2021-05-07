@@ -29,7 +29,7 @@ exports.post_add_hostel = async (req, res, next) => {
     const addr = req.body.address;
     const additional = req.body.additional;
     const services = JSON.parse(req.body.servicenames);
-    const images = req.files.map(e => e.path);
+    const images = req.files.map(e => 'file://'+e.path);
     const decoded = verify.authenticate(req);
 
     if (decoded) {
