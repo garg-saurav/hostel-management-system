@@ -52,4 +52,14 @@ module.exports = class Manager {
         }
     }
 
+    async view_hostel_managed() {
+        try{
+            const res = await pool.query('SELECT * FROM person NATURAL JOIN regional_manager WHERE email_id=$1;',[this.email]);
+            const id = res.rows[0].person_id;
+            return pool.query('SELECT b.building_id as building_id, b.location_point as location_point, b.building_name as building_name, b.city as city, b.addr as addr, b.building_type as building_type,  b.additional_info as additional_info, rm.person_id as person_id, p.name as name, p.email_id as email_id, p.phone_number as phone_number FROM building as b NATURAL JOIN regional_manager as rm INNER JOIN person as p ON p.person_id=b.hostel_owner_id WHERE rm.person_id = $1;', [id]);
+        }catch(e){
+            throw e;
+        }
+    }
+
 };
