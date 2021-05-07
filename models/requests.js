@@ -72,7 +72,7 @@ module.exports = class Request {
         try{
             const res = await pool.query('SELECT person_id FROM person where email_id = $1;', [this.email]);
             const hid = res.rows[0].person_id;
-            return pool.query("SELECT request_id, b.booking_id as booking_id, bd.building_id as building_id, building_name, room_no, TO_CHAR(time_stamp, 'dd/mm/yyyy'), TO_CHAR(start_date, 'dd/mm/yyyy'), TO_CHAR(end_date, 'dd/mm/yyyy'), location_point, bd.addr as addr, name, email_id, phone_number FROM modification_request as m, booking as b, building as bd, person as p WHERE m.cancelled = False AND m.booking_id = b.booking_id AND b.building_id = bd.building_id AND bd.hostel_owner_id=$1 AND b.customer_id=p.person_id ORDER BY time_stamp desc;", [hid]);
+            return pool.query("SELECT request_id, b.booking_id as booking_id, bd.building_id as building_id, building_name, room_no, TO_CHAR(time_stamp, 'dd/mm/yyyy'), start_date, end_date, new_start_date, new_end_date location_point, bd.addr as addr, name, email_id, phone_number FROM modification_request as m, booking as b, building as bd, person as p WHERE m.cancelled = False AND m.booking_id = b.booking_id AND b.building_id = bd.building_id AND bd.hostel_owner_id=$1 AND b.customer_id=p.person_id ORDER BY time_stamp desc;", [hid]);
         } catch (e){
             throw e;
         }
@@ -81,10 +81,20 @@ module.exports = class Request {
     async accept_modif_request() {
         try {
             await pool.query('BEGIN;');
-            await pool.query('UPDATE modification_request SET approval = False and comment = $2 WHERE request_id = $1;', [this.request_id, this.comment]);
-            const res = await pool.query('SELECT booking_id from modification_request WHERE request_id=$1;', [this.request_id]);
+            await pool.query('UPDATE modification_request SET approval = True and comment = $2 WHERE request_id = $1;', [this.request_id, this.comment]);
+            const res = await pool.query('SELECT new_start_date, new_end_date, booking_id from modification_request WHERE request_id=$1;', [this.request_id]);
             const bid = res.rows[0].booking_id;
-            await pool.query('UPDATE booking SET cancelled = True WHERE booking_id = $1;', [bid]);
+            const nsd = res.rows[0].new_start_date;
+            const ned = res.rows[0].new_end_date;
+            await pool.query('UPDATE booking SET start_date = $2 AND end_date = $3 WHERE booking_id = $1;', [bid, nsd, ned]);
+            await pool.query('DELETE FROM booking_services WHERE booking_id = $1;', [bid]);
+
+            const services = await pool.query('SELECT * FROM services_modify WHERE request_id=$1;', [this.request_id]);
+            const num_serv = services.rowCount;
+            for (i=0;i<num_serv;i++){
+                const stype = services.rows[i].service_type;
+                await pool.query('INSERT INTO booking_services(booking_id, service_type) VALUES($1, $2);', [bid, stype]);
+            }
             await pool.query('COMMIT;')
         } catch (e) {
             await pool.query('ROLLBACK;');
@@ -104,7 +114,7 @@ module.exports = class Request {
         try{
             const res = await pool.query('SELECT person_id FROM person where email_id = $1;', [this.email]);
             const hid = res.rows[0].person_id;
-            return pool.query("SELECT request_id, b.booking_id as booking_id, bd.building_id as building_id, building_name, room_no, TO_CHAR(time_stamp, 'dd/mm/yyyy'), TO_CHAR(start_date, 'dd/mm/yyyy'), TO_CHAR(end_date, 'dd/mm/yyyy'), location_point, bd.addr as addr, name, email_id, phone_number FROM modification_request as m, booking as b, building as bd, person as p WHERE m.cancelled = True AND m.booking_id = b.booking_id AND b.building_id = bd.building_id AND bd.hostel_owner_id=$1 AND b.customer_id=p.person_id ORDER BY time_stamp desc;", [hid]);
+            return pool.query("SELECT request_id, b.booking_id as booking_id, bd.building_id as building_id, building_name, room_no, TO_CHAR(time_stamp, 'dd/mm/yyyy'), start_date, end_date, location_point, bd.addr as addr, name, email_id, phone_number FROM modification_request as m, booking as b, building as bd, person as p WHERE m.cancelled = True AND m.booking_id = b.booking_id AND b.building_id = bd.building_id AND bd.hostel_owner_id=$1 AND b.customer_id=p.person_id ORDER BY time_stamp desc;", [hid]);
         } catch (e){
             throw e;
         }

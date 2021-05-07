@@ -10,6 +10,7 @@
         
                 <!-- ADD Room Type FORM -->
                 <form action="/owner/hostel/add_room_type" method="POST">
+                    <input name="building_id" type="hidden" value="<%=info.building_id%>">
                     <div class="form-group">
                         <label>Enter Rent</label>
                         <input type="text" class="form-control" name="rent" required>
@@ -18,12 +19,12 @@
                         <label>Enter Num Beds</label>
                         <input type="text" class="form-control" name="num_beds" required>
                     </div>
-                    <label>AC/Non-AC:</label>
-                    <select>
-                        <option >AC</option>
-                        <option >Non-AC</option>
-                    </select>
-        
+                    <div class="form-group">
+                        <select name="ac_or_non_ac">
+                            <option value="ac">AC</option>
+                            <option value="non_ac">Non-AC</option>
+                        </select>
+                    </div>
                     <button type="submit" class="btn btn-warning btn-lg">Add Room Type</button>
                 </form>
         

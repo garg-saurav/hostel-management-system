@@ -32,12 +32,12 @@ exports.post_cancel_req = async (req, res, next) => {
         const request_id = req.body.request_id;
         const comment = req.body.comment;
         const approval = req.body.approve_or_reject;
-        req = new Request(request_id, null, null, null, comment);
+        requ = new Request(request_id, null, null, null, comment);
         if (approval=="approve") {
-            await req.accept_cancel_request();
+            await requ.accept_cancel_request();
         }
         else if (approval=="reject"){
-            await req.reject_cancel_request();
+            await requ.reject_cancel_request();
         }
         res.redirect('/profile');
     }
@@ -77,12 +77,12 @@ exports.post_modif_req = async (req, res, next) => {
         const request_id = req.body.request_id;
         const comment = req.body.comment;
         const approval = req.body.approve_or_reject;
-        req = new Request(request_id, null, null, null, comment);
+        requ = new Request(request_id, null, null, null, comment);
         if (approval=="approve") {
-            await req.accept_modif_request();
+            await requ.accept_modif_request();
         }
         else if (approval=="reject"){
-            await req.reject_modif_request();
+            await requ.reject_modif_request();
         }
         res.redirect('/profile');
     }
