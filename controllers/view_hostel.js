@@ -60,6 +60,8 @@ exports.view_rooms_type = async (req, res, next) => {
         //todo: redirect building_id and rooms_type_id to the page for 
         console.log(building_id);
         console.log(rooms_type_id);
+
+        // res.redirect('/owner/' + building_id + '/' + rooms_type_id);
     } else {
         return res.send('<script>alert("Please login first"); window.location.href = "/login";</script>');
     }
