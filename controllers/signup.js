@@ -4,6 +4,7 @@ const Person = require('../models/person');
 const bcrypt = require('bcryptjs');
 const e = require('express');
 const verify = require('../private/verify');
+const Manager = require('../models/manager');
 
 exports.get_signup = (req, res, next) => {
 
@@ -59,6 +60,11 @@ exports.post_reg_as_other_type = async (req, res, next) => {
             // register as customer
             owner = new Owner(null, decoded.email, null, null, null, null);
             await owner.reg_as_customer();
+            res.send('<script>alert("User registered as customer with same password! You can login again as different role"); window.location.href = "/profile";</script>');
+        }else if (role == "regional_manager"){
+            // register as customer
+            manager = new Manager(null, decoded.email, null, null, null, null);
+            await manager.reg_as_customer();
             res.send('<script>alert("User registered as customer with same password! You can login again as different role"); window.location.href = "/profile";</script>');
         } else {
             // can't reach here

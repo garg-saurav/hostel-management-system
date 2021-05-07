@@ -4,6 +4,7 @@ const Keys = require('../private/keys');
 const jwt = require('jsonwebtoken');
 const Person = require('../models/person');
 const verify = require('../private/verify');
+const Manager = require('../models/manager');
 
 const JWT_SECRET = Keys.JWT_SECRET;
 
@@ -50,6 +51,23 @@ exports.get_profile = async (req, res, next) => {
                     has_other_role: is_a_customer.rowCount > 0,
                     hostels: hostels.rows,
                     num_hostels: hostels.rowCount,
+                });
+            }else if(decoded.role == 'regional_manager'){
+                manager = new Manager(null, user.rows[0].email_id, null, null, null, null);
+                const is_a_customer = await manager.is_a_customer();
+                res.render('managerprofile', {
+                    pageTitle: 'Profile',
+                    path: '/profile',
+                    name: user.rows[0].name,
+                    email_id: user.rows[0].email_id,
+                    dob: user.rows[0].dob,
+                    phone_no: user.rows[0].phone_number,
+                    addr: user.rows[0].addr,
+                    has_other_role: is_a_customer.rowCount>0,
+                    // bookings: user_bookings.rows,
+                //     numbookings: user_bookings.rowCount,
+                //     has_ended: user_bookings.has_ended,
+                //     has_started: user_bookings.has_started,
                 });
             }else{
                 // can't reach here
