@@ -39,11 +39,11 @@ exports.post_add_hostel = async (req, res, next) => {
         } else {
             const hostel = new Hostel(null, name, city, user.rows[0].id, addr, additional, services, photos);
             await hostel.add_hostel_request();
-            res.redirect('/owner/profile');
+            res.redirect('/profile');
             // TODO - redirect to /owner/hostel_request
         }
     }
     else {
-        res.send('<script>alert("Please login first"); window.location.href = "/owner/login";</script>');
+        res.send('<script>alert("Please login first"); window.location.href = "/login";</script>');
     }
 }

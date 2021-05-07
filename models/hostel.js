@@ -42,7 +42,7 @@ module.exports = class Hostel {
     async view_hostel_request() {
         try {
             await pool.query('BEGIN;');
-            await pool.query('UPDATE request_new_hostel SET approval=True and comment=$2 WHERE request_id=$1;');
+            await pool.query('UPDATE request_new_hostel SET approval=True, comment=$2 WHERE request_id=$1;');
             await pool.query('INSERT INTO building(building_name, hostel_owner_id, city, addr,building_type, additional_info) VALUES($1, $2, $3, $4, $5, $6);');
             await pool.query('INSERT INTO services(service_type, rate_per_month) VALUES($1, $2);');
             await pool.query('COMMIT;')

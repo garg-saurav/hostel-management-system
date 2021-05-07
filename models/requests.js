@@ -30,7 +30,7 @@ module.exports = class Request {
             const bid = await pool.query('SELECT COALESCE(MAX(building_id),0)+1 as b_id FROM building;');
             const id = bid.rows[0].b_id;
             const res = await pool.query('SELECT * FROM request_new_hostel WHERE request_id=$1;', [this.request_id]);
-            await pool.query('UPDATE request_new_hostel SET approval = True and comment = $2 WHERE request_id = $1;', [this.request_id, this.comment]);
+            await pool.query('UPDATE request_new_hostel SET approval = True, comment = $2 WHERE request_id = $1;', [this.request_id, this.comment]);
             const bname = res.rows[0].building_name;
             const lp = res.rows[0].location_point;
             const pid = res.rows[0].hostel_owner_id;
@@ -42,7 +42,7 @@ module.exports = class Request {
 
             const services = await pool.query('SELECT * FROM request_hostel_services WHERE request_id=$1;', [this.request_id]);
             const num_serv = services.rowCount;
-            for (i=0;i<num_serv;i++){
+            for (var i=0;i<num_serv;i++){
                 const stype = services.rows[i].service_type;
                 const rate = services.rows[i].rate_per_month;
                 await pool.query('INSERT INTO services(building_id, service_type, rate_per_month) VALUES($1, $2, $3);', [id,stype, rate]);
@@ -50,7 +50,7 @@ module.exports = class Request {
 
             const pics = await pool.query('SELECT * FROM request_hostel_photos WHERE request_id=$1;', [this.request_id]);
             const num_pics = pics.rowCount;
-            for (i=0;i<num_pics;i++){
+            for (var i=0;i<num_pics;i++){
                 const pic = pics.rows[i].photo;
                 await pool.query('INSERT INTO building_photos(building_id, photo) VALUES($1, $2);', [id, pic]);
             }
@@ -60,9 +60,10 @@ module.exports = class Request {
             throw e;
         }
     }
+
     async reject_hostel_request() {
         try {
-            await pool.query('UPDATE request_new_hostel SET approval = False and comment = $2 WHERE request_id = $1;', [this.request_id, this.comment]);
+            await pool.query('UPDATE request_new_hostel SET approval = False, comment = $2 WHERE request_id = $1;', [this.request_id, this.comment]);
         } catch (e) {
             throw e;
         }
@@ -72,7 +73,7 @@ module.exports = class Request {
         try{
             const res = await pool.query('SELECT person_id FROM person where email_id = $1;', [this.email]);
             const hid = res.rows[0].person_id;
-            return pool.query("SELECT request_id, b.booking_id as booking_id, bd.building_id as building_id, building_name, room_no, TO_CHAR(time_stamp, 'dd/mm/yyyy'), start_date, end_date, new_start_date, new_end_date location_point, bd.addr as addr, name, email_id, phone_number FROM modification_request as m, booking as b, building as bd, person as p WHERE m.cancelled = False AND m.booking_id = b.booking_id AND b.building_id = bd.building_id AND bd.hostel_owner_id=$1 AND b.customer_id=p.person_id ORDER BY time_stamp desc;", [hid]);
+            return pool.query("SELECT request_id, b.booking_id as booking_id, bd.building_id as building_id, building_name, room_no, TO_CHAR(time_stamp, 'dd/mm/yyyy') as time_stamp, TO_CHAR(start_date, 'dd/mm/yyyy') as start_date, TO_CHAR(end_date, 'dd/mm/yyyy') as end_date,TO_CHAR(new_start_date, 'dd/mm/yyyy') as new_start_date, TO_CHAR(new_end_date, 'dd/mm/yyyy') as new_end_date, location_point, bd.addr as addr, name, email_id, phone_number FROM (((modification_request as m INNER JOIN booking as b on m.booking_id=b.booking_id) INNER JOIN building as bd ON bd.building_id=b.building_id) INNER JOIN person as p ON b.customer_id=p.person_id) WHERE m.cancelled = True AND approval is null AND bd.hostel_owner_id=$1 ORDER BY time_stamp desc;", [hid]);
         } catch (e){
             throw e;
         }
@@ -81,17 +82,17 @@ module.exports = class Request {
     async accept_modif_request() {
         try {
             await pool.query('BEGIN;');
-            await pool.query('UPDATE modification_request SET approval = True and comment = $2 WHERE request_id = $1;', [this.request_id, this.comment]);
+            await pool.query('UPDATE modification_request SET approval = True, comment = $2 WHERE request_id = $1;', [this.request_id, this.comment]);
             const res = await pool.query('SELECT new_start_date, new_end_date, booking_id from modification_request WHERE request_id=$1;', [this.request_id]);
             const bid = res.rows[0].booking_id;
             const nsd = res.rows[0].new_start_date;
             const ned = res.rows[0].new_end_date;
-            await pool.query('UPDATE booking SET start_date = $2 AND end_date = $3 WHERE booking_id = $1;', [bid, nsd, ned]);
+            await pool.query('UPDATE booking SET start_date = $2, end_date = $3 WHERE booking_id = $1;', [bid, nsd, ned]);
             await pool.query('DELETE FROM booking_services WHERE booking_id = $1;', [bid]);
 
             const services = await pool.query('SELECT * FROM services_modify WHERE request_id=$1;', [this.request_id]);
             const num_serv = services.rowCount;
-            for (i=0;i<num_serv;i++){
+            for (var i=0;i<num_serv;i++){
                 const stype = services.rows[i].service_type;
                 await pool.query('INSERT INTO booking_services(booking_id, service_type) VALUES($1, $2);', [bid, stype]);
             }
@@ -104,7 +105,7 @@ module.exports = class Request {
 
     async reject_modif_request() {
         try {
-            await pool.query('UPDATE modification_request SET approval = False and comment = $2 WHERE request_id = $1;', [this.request_id, this.comment]);
+            await pool.query('UPDATE modification_request SET approval = False, comment = $2 WHERE request_id = $1;', [this.request_id, this.comment]);
         } catch (e) {
             throw e;
         }
@@ -114,7 +115,7 @@ module.exports = class Request {
         try{
             const res = await pool.query('SELECT person_id FROM person where email_id = $1;', [this.email]);
             const hid = res.rows[0].person_id;
-            return pool.query("SELECT request_id, b.booking_id as booking_id, bd.building_id as building_id, building_name, room_no, TO_CHAR(time_stamp, 'dd/mm/yyyy'), start_date, end_date, location_point, bd.addr as addr, name, email_id, phone_number FROM modification_request as m, booking as b, building as bd, person as p WHERE m.cancelled = True AND m.booking_id = b.booking_id AND b.building_id = bd.building_id AND bd.hostel_owner_id=$1 AND b.customer_id=p.person_id ORDER BY time_stamp desc;", [hid]);
+            return pool.query("SELECT request_id, b.booking_id as booking_id, bd.building_id as building_id, building_name, room_no, TO_CHAR(time_stamp, 'dd/mm/yyyy') as time_stamp, TO_CHAR(start_date, 'dd/mm/yyyy') as start_date, TO_CHAR(end_date, 'dd/mm/yyyy') as end_date, location_point, bd.addr as addr, name, email_id, phone_number FROM (((modification_request as m INNER JOIN booking as b on m.booking_id=b.booking_id) INNER JOIN building as bd ON bd.building_id=b.building_id) INNER JOIN person as p ON b.customer_id=p.person_id) WHERE m.cancelled = True AND approval is null AND bd.hostel_owner_id=$1 ORDER BY time_stamp desc;", [hid]);
         } catch (e){
             throw e;
         }
@@ -122,7 +123,7 @@ module.exports = class Request {
     async accept_cancel_request() {
         try {
             await pool.query('BEGIN;');
-            await pool.query('UPDATE modification_request SET approval = False and comment = $2 WHERE request_id = $1;', [this.request_id, this.comment]);
+            await pool.query('UPDATE modification_request SET approval = True, comment = $2 WHERE request_id = $1;', [this.request_id, this.comment]);
             const res = await pool.query('SELECT booking_id from modification_request WHERE request_id=$1;', [this.request_id]);
             const bid = res.rows[0].booking_id;
             await pool.query('UPDATE booking SET cancelled = True WHERE booking_id = $1;', [bid]);
@@ -134,7 +135,7 @@ module.exports = class Request {
     }
     async reject_cancel_request() {
         try {
-            await pool.query('UPDATE modification_request SET approval = False and comment = $2 WHERE request_id = $1;', [this.request_id, this.comment]);
+            await pool.query('UPDATE modification_request SET approval = False, comment = $2 WHERE request_id = $1;', [this.request_id, this.comment]);
         } catch (e) {
             throw e;
         }

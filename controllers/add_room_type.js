@@ -1,5 +1,6 @@
 const Building = require('../models/building');
 const verify = require('../private/verify');
+const Room = require('../models/room');
 
 exports.get_add_room_type = async (req, res, next) => {
     const decoded = verify.authenticate(req);
@@ -30,11 +31,11 @@ exports.post_add_room_type = async (req, res, next) => {
         if(ac=="non_ac"){
             boo = false;
         }
-        room = new Room(building_id, null, rent, num_beds, ac, null, null);
+        room = new Room(building_id, null, rent, num_beds, boo, null, null);
         await room.add_room_type();
-        res.redirect('/owner/hostel');
+        res.redirect('/owner/hostel/?id='+building_id);
     }
     else {
-        res.send('<script>alert("Please login first"); window.location.href = "/owner/login";</script>');
+        res.send('<script>alert("Please login first"); window.location.href = "/login";</script>');
     }
 }
