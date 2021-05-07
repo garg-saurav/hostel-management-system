@@ -29,9 +29,6 @@ exports.post_add_hostel = async (req, res, next) => {
     const additional = req.body.additional;
     const services = req.body.servicenames;
     const images = req.body.hostelimages;
-
-    console.log(name, city, addr, additional, services, images);
-
     const decoded = verify.authenticate(req);
 
     if (decoded) {
@@ -40,10 +37,9 @@ exports.post_add_hostel = async (req, res, next) => {
         if (user.rowCount == 0) {
             res.send('<script>alert("Details not found"); window.location.href = "/login";</script>');
         } else {
-            const hostel = new Hostel(null, name, city, user.rows[0].id, addr, additional, services, photos);
+            const hostel = new Hostel(null, name, city, user.rows[0].id, addr, additional, services, images);
             await hostel.add_hostel_request();
             res.redirect('/profile');
-            // TODO - redirect to /owner/hostel_request
         }
     }
     else {
