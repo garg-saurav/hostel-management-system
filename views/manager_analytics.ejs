@@ -1,0 +1,93 @@
+
+<head>
+    <%- include('./includes/head.ejs') %>
+        <link rel="stylesheet" href="../public/css/profile.css">
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    google.charts.load("current", { packages: ['corechart'] });
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {
+        var ar = [
+            ["Year", "Number of bookings"]
+        ];
+        cur_year = <%=cur_year%>;
+        num_booking_data = <%-num_booking_data%>;
+        for(var i=cur_year-4; i<=cur_year; i++)
+        {
+            var found = false;
+            
+            var num_bookings;
+            for(const tup in num_booking_data){
+                if(num_booking_data[tup][0] == i){
+                    found = true;
+                    num_bookings = num_booking_data[tup][1];
+                    break;
+                }
+            }
+            if(!found){
+                num_bookings = 0;
+            }
+            ar.push([i.toString(), parseInt(num_bookings)]);
+        }
+        var data = google.visualization.arrayToDataTable(ar);
+
+        var view = new google.visualization.DataView(data);
+        
+
+        var options = {
+            title: "Number of bookings in the last 5 years",
+            width: 600,
+            height: 400,
+            bar: { groupWidth: "95%" },
+            legend: { position: "none" },
+        };
+        var chart = new google.visualization.ColumnChart(document.getElementById("num_bookings"));
+        chart.draw(view, options);
+
+        var ar2 = [
+            ["Year", "Number of cancels"]
+        ];
+        num_cancellation_data = <%-num_cancellation_data %>;
+        for (var i = cur_year - 4; i <= cur_year; i++) {
+            var found = false;
+
+            var num_cancel;
+            for (const tup in num_cancellation_data) {
+                if (num_cancellation_data[tup][0] == i) {
+                    found = true;
+                    num_cancel = num_cancellation_data[tup][1];
+                    break;
+                }
+            }
+            if (!found) {
+                num_cancel = 0;
+            }
+            ar2.push([i.toString(), parseInt(num_cancel)]);
+        }
+        var data2 = google.visualization.arrayToDataTable(ar2);
+
+        var view2 = new google.visualization.DataView(data2);
+
+
+        var options2 = {
+            title: "Number of booking cancellations in the last 5 years",
+            width: 600,
+            height: 400,
+            bar: { groupWidth: "95%" },
+            legend: { position: "none" },
+        };
+        var chart2 = new google.visualization.ColumnChart(document.getElementById("num_cancel"));
+        chart2.draw(view2, options2);
+    }
+</script>
+
+
+
+
+<body>
+    <%- include('./includes/navigation.ejs') %>
+    <div> <h5 style="text-align: center;">Number of hostels under you: <%=num_hostels%></h5></div>
+    <div id="num_bookings" style="width: 900px; height: 350px;"></div>
+    <div id="num_cancel" style="width: 900px; height: 350px;"></div>
+</body>
+

@@ -1,64 +1,129 @@
-<%- include('./includes/head.ejs') %>
-    <link rel="stylesheet" href="../public/css/profile.css">
-    
 
-
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-        google.charts.load("current", { packages: ["corechart"] });
-        google.charts.setOnLoadCallback(drawChart);
-        function drawChart() {
-            var ar = [];
-            // for(var i=cur_year-4; i<=cur_year; i++)
-            // {
-
-            // }
+<head>
+    <%- include('./includes/head.ejs') %>
+        <link rel="stylesheet" href="../public/css/profile.css">
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+    google.charts.load("current", { packages: ['corechart'] });
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {
+        var ar = [
+            ["Year", "Number of bookings"]
+        ];
+        cur_year = <%=cur_year%>;
+        num_booking_data = <%-num_booking_data%>;
+        for(var i=cur_year-4; i<=cur_year; i++)
+        {
+            var found = false;
             
-            ar= [
-                ['Dinosaur', 'Length'],
-                ['Acrocanthosaurus (top-spined lizard)', 12.2],
-                ['Albertosaurus (Alberta lizard)', 9.1],
-                ['Allosaurus (other lizard)', 12.2],
-                ['Apatosaurus (deceptive lizard)', 22.9],
-                ['Archaeopteryx (ancient wing)', 0.9],
-                ['Argentinosaurus (Argentina lizard)', 36.6],
-                ['Baryonyx (heavy claws)', 9.1],
-                ['Brachiosaurus (arm lizard)', 30.5],
-                ['Ceratosaurus (horned lizard)', 6.1],
-                ['Coelophysis (hollow form)', 2.7],
-                ['Compsognathus (elegant jaw)', 0.9],
-                ['Deinonychus (terrible claw)', 2.7],
-                ['Diplodocus (double beam)', 27.1],
-                ['Dromicelomimus (emu mimic)', 3.4],
-                ['Gallimimus (fowl mimic)', 5.5],
-                ['Mamenchisaurus (Mamenchi lizard)', 21.0],
-                ['Megalosaurus (big lizard)', 7.9],
-                ['Microvenator (small hunter)', 1.2],
-                ['Ornithomimus (bird mimic)', 4.6],
-                ['Oviraptor (egg robber)', 1.5],
-                ['Plateosaurus (flat lizard)', 7.9],
-                ['Sauronithoides (narrow-clawed lizard)', 2.0],
-                ['Seismosaurus (tremor lizard)', 45.7],
-                ['Spinosaurus (spiny lizard)', 12.2],
-                ['Supersaurus (super lizard)', 30.5],
-                ['Tyrannosaurus (tyrant lizard)', 15.2],
-                ['Ultrasaurus (ultra lizard)', 30.5],
-                ['Velociraptor (swift robber)', 1.8]];
-            var data = google.visualization.arrayToDataTable(ar);
-            var options = {
-                title: 'Number of bookings in the previous 5 years',
-                legend: { position: 'none' },
-            };
-
-            var chart = new google.visualization.Histogram(document.getElementById('chart_div'));
-            chart.draw(data, options);
+            var num_bookings;
+            for(const tup in num_booking_data){
+                if(num_booking_data[tup][0] == i){
+                    found = true;
+                    num_bookings = num_booking_data[tup][1];
+                    break;
+                }
+            }
+            if(!found){
+                num_bookings = 0;
+            }
+            ar.push([i.toString(), parseInt(num_bookings)]);
         }
-    </script>
-</head>
+        var data = google.visualization.arrayToDataTable(ar);
+
+        var view = new google.visualization.DataView(data);
+        
+
+        var options = {
+            title: "Number of bookings in the last 5 years",
+            width: 600,
+            height: 400,
+            bar: { groupWidth: "95%" },
+            legend: { position: "none" },
+        };
+        var chart = new google.visualization.ColumnChart(document.getElementById("num_bookings"));
+        chart.draw(view, options);
+
+        var ar2 = [
+            ["Year", "Number of cancels"]
+        ];
+        num_cancellation_data = <%-num_cancellation_data %>;
+        for (var i = cur_year - 4; i <= cur_year; i++) {
+            var found = false;
+
+            var num_cancel;
+            for (const tup in num_cancellation_data) {
+                if (num_cancellation_data[tup][0] == i) {
+                    found = true;
+                    num_cancel = num_cancellation_data[tup][1];
+                    break;
+                }
+            }
+            if (!found) {
+                num_cancel = 0;
+            }
+            ar2.push([i.toString(), parseInt(num_cancel)]);
+        }
+        var data2 = google.visualization.arrayToDataTable(ar2);
+
+        var view2 = new google.visualization.DataView(data2);
+
+
+        var options2 = {
+            title: "Number of booking cancellations in the last 5 years",
+            width: 600,
+            height: 400,
+            bar: { groupWidth: "95%" },
+            legend: { position: "none" },
+        };
+        var chart2 = new google.visualization.ColumnChart(document.getElementById("num_cancel"));
+        chart2.draw(view2, options2);
+
+
+        var ar3 = [
+            ["Year", "Number of good ratings"]
+        ];
+        num_good_ratings_data = <%-num_good_ratings_data %>;
+        for (var i = cur_year - 4; i <= cur_year; i++) {
+            var found = false;
+
+            var num_ratings;
+            for (const tup in num_good_ratings_data) {
+                if (num_good_ratings_data[tup][0] == i) {
+                    found = true;
+                    num_ratings = num_good_ratings_data[tup][1];
+                    break;
+                }
+            }
+            if (!found) {
+                num_ratings = 0;
+            }
+            ar3.push([i.toString(), parseInt(num_ratings)]);
+        }
+        var data3 = google.visualization.arrayToDataTable(ar3);
+
+        var view3 = new google.visualization.DataView(data3);
+
+
+        var options3 = {
+            title: "Number of good (>=4) ratings in the last 5 years",
+            width: 600,
+            height: 400,
+            bar: { groupWidth: "95%" },
+            legend: { position: "none" },
+        };
+        var chart3 = new google.visualization.ColumnChart(document.getElementById("num_rating"));
+        chart3.draw(view3, options3);
+    }
+</script>
+
+
+
 
 <body>
     <%- include('./includes/navigation.ejs') %>
-    <div id="chart_div" style="width: 900px; height: 500px;"></div>
-    <p
+    <div id="num_bookings" style="width: 900px; height: 350px;"></div>
+    <div id="num_cancel" style="width: 900px; height: 350px;"></div>
+    <div id="num_rating" style="width: 900px; height: 350px;"></div>
 </body>
 

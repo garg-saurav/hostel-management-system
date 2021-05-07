@@ -54,6 +54,7 @@ module.exports = class Analytics {
         ORDER BY year`, [this.person_id, year - 5]);
     }
 
+    //manager analytics
     async get_manager_hostels(city) {
         var d = new Date;
         var year = d.getFullYear();
@@ -70,7 +71,7 @@ module.exports = class Analytics {
         (SELECT EXTRACT(YEAR FROM start_date) as year, booking_id
         FROM booking
         WHERE building_id IN (SELECT * FROM buildings) AND cancelled = false)
-        SELECT year, count(booking_id)
+        SELECT year, count(*) as num_bookings
         FROM bookings
         WHERE year > $2
         GROUP BY year
@@ -86,7 +87,7 @@ module.exports = class Analytics {
         (SELECT EXTRACT(YEAR FROM start_date) as year, booking_id
         FROM booking
         WHERE building_id IN (SELECT * FROM buildings) AND cancelled = true)
-        SELECT year, count(*)
+        SELECT year, count(*) as num_cancel
         FROM bookings
         WHERE year > $2
         GROUP BY year
