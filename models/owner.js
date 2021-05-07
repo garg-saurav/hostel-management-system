@@ -19,7 +19,6 @@ module.exports = class Owner {
         await pool.query('BEGIN;');
         const res = await pool.query('SELECT * FROM person NATURAL JOIN hostel_owner WHERE email_id=$1;', [this.email]);
         const id = res.rows[0].person_id;
-        // console.log(id);
         return pool.query('SELECT * FROM building WHERE hostel_owner_id = $1', [id]);
     }
 

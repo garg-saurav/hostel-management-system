@@ -39,7 +39,6 @@ exports.get_profile = async (req, res, next) => {
                 owner = new Owner(null, user.rows[0].email_id, null, null, null, null);
                 const is_a_customer = await owner.is_a_customer();
                 const hostels = await owner.get_hostels_owned();
-                // console.log(hostels)
                 res.render('ownerprofile', {
                     pageTitle: 'Profile',
                     path: '/profile',
@@ -91,7 +90,6 @@ exports.post_booking = async (req, res, next) => {
         }
         else if (decoded.role == 'hostel_owner') {
             var string = encodeURIComponent(req.body.building_id);
-            // console.log(string);
             res.redirect('/owner/hostel/?id=' + string);
         }
         else if (decoded.role == 'regional_manager') {

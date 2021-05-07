@@ -1,6 +1,66 @@
 <%- include('./includes/head.ejs') %>
-    </head>
+<script>
+    var all_names = [];
+    var all_rates = [];
+    function addItem(){
+        var present = false;
+        var ul = document.getElementById("dynamic-list");
+        var servicename = document.getElementById("servicename");
+        var servicerate = document.getElementById("servicerate");
+        if(!servicename.value || !servicerate.value){
+            return;
+        }
+        console.log(all_names);
+        for(var i=0; i<all_names.length; i++){
+            if(all_names[i]==servicename.value){
+                present = true;
+                break;
+            }
+        }
+        console.log(present);
+        if(!present){
+            var li = document.createElement("li");
+            li.setAttribute('id',servicename.value);
+            li.appendChild(document.createTextNode(servicename.value+" - Rs. "+servicerate.value+" pm"));
+            ul.appendChild(li);
+            all_names.push(servicename.value);
+            all_rates.push(servicerate.value);
+            var inp1 = document.getElementById("servicenames");
+            var inp2 = document.getElementById("servicerates");
+            inp1.setAttribute('value',JSON.stringify(all_names));
+            inp2.setAttribute('value',JSON.stringify(all_rates));
+        }
+    }
 
+    function removeItem(){
+        var present = false;
+        var index = null;
+        var ul = document.getElementById("dynamic-list");
+        var servicename = document.getElementById("removeservicename");
+        if(!servicename.value){
+            return;
+        }
+        for(var i=0; i<all_names.length; i++){
+            if(all_names[i]==servicename.value){
+                present = true;
+                index = i;
+                break;
+            }
+        }
+        if(present){
+            var item = document.getElementById(servicename.value);
+            ul.removeChild(item);
+            all_names.splice(index, 1);
+            all_rates.splice(index, 1);
+            var inp = document.getElementById("services");
+            var inp1 = document.getElementById("servicenames");
+            var inp2 = document.getElementById("servicerates");
+            inp1.setAttribute('value',JSON.stringify(all_names));
+            inp2.setAttribute('value',JSON.stringify(all_rates));
+        }
+    }
+</script>
+</head>
     <body>
         <%- include('./includes/navigation.ejs') %>
             <div class="container">
@@ -26,12 +86,22 @@
                             <label>Enter Additional Info(Optional)</label>
                             <input type="text" class="form-control" name="additional">
                         </div>
-                        <!-- TODO - services -->
-                        <!-- TODO - photos -->
+                        <div class="form-group">
+                            <label>Services</label>
+                            <ul id="dynamic-list"></ul>
 
-
-
-                        <button type="submit" class="btn btn-warning btn-lg">Login</button>
+                            <input type="text" id="servicename" size=15 placeholder="Service name"/>
+                            <input type="number" id="servicerate" size=14 placeholder="Rate per month"/>
+                            <button onclick="addItem()" class="btn btn-warning">Add service</button>
+                            <br><br>
+                            <input type="text" id="removeservicename" size=15 placeholder="Service name"/>
+                            <button onclick="removeItem()" class="btn btn-danger">Remove service</button>
+                            <br><br>
+                            
+                            <input type="text" name="servicenames" id="servicenames" disabled hidden>
+                            <input type="text" name="servicerates" id="servicerates" disabled hidden>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-lg">Submit</button>
                     </form>
 
                     <hr>
