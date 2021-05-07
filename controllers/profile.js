@@ -38,6 +38,8 @@ exports.get_profile = async (req, res, next) => {
             }else if(decoded.role == 'hostel_owner'){
                 owner = new Owner(null, user.rows[0].email_id, null, null, null, null);
                 const is_a_customer = await owner.is_a_customer();
+                const hostels = await owner.get_hostels_owned();
+                // console.log(hostels)
                 res.render('ownerprofile', {
                     pageTitle: 'Profile',
                     path: '/profile',
@@ -46,11 +48,9 @@ exports.get_profile = async (req, res, next) => {
                     dob: user.rows[0].dob,
                     phone_no: user.rows[0].phone_number,
                     addr: user.rows[0].addr,
-                    has_other_role: is_a_customer.rowCount>0,
-                    // bookings: user_bookings.rows,
-                //     numbookings: user_bookings.rowCount,
-                //     has_ended: user_bookings.has_ended,
-                //     has_started: user_bookings.has_started,
+                    has_other_role: is_a_customer.rowCount > 0,
+                    hostels: hostels.rows,
+                    num_hostels: hostels.rowCount,
                 });
             }else if(decoded.role == 'regional_manager'){
                 manager = new Manager(null, user.rows[0].email_id, null, null, null, null);
@@ -85,13 +85,21 @@ exports.post_booking = async (req, res, next) => {
 
     const decoded = verify.authenticate(req);
     if (decoded) {
-        if(decoded.role=='customer'){
+        if (decoded.role == 'customer') {
             var string = encodeURIComponent(req.body.booking_id);
-            res.redirect('/customer/bookingdetails/?id='+string);
+            res.redirect('/customer/bookingdetails/?id=' + string);
+        }
+        else if (decoded.role == 'hostel_owner') {
+            var string = encodeURIComponent(req.body.building_id);
+            // console.log(string);
+            res.redirect('/owner/hostel/?id=' + string);
         }
         else if (decoded.role == 'regional_manager') {
             var string = encodeURIComponent(req.body.building_id);
             res.redirect('/manager/hostel_details/?id=' + string);
+        }
+        else{
+            
         }
     }else{
         return res.send('<script>alert("Please login first"); window.location.href = "/login";</script>');

@@ -20,6 +20,28 @@ module.exports = class Booking{
         }
     }
 
+    async add_rating(rating) {
+        try {
+            await pool.query('BEGIN;');
+            await pool.query('UPDATE booking SET rating = $1 WHERE booking_id = $2;', [rating, this.booking_id]);
+        }
+        catch (e) {
+            await pool.query('ROLLBACK;');
+            throw e;
+        }
+    }
+
+    async add_review(review) {
+        try {
+            await pool.query('BEGIN;');
+            await pool.query('UPDATE booking SET review = $1 WHERE booking_id = $2;', [review, this.booking_id]);
+        }
+        catch (e) {
+            await pool.query('ROLLBACK;');
+            throw e;
+        }
+    }
+
     async get_customer_email(){
         try{
             const res = await pool.query('SELECT customer_id FROM booking WHERE booking_id=$1;',[this.booking_id]);

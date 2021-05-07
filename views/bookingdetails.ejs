@@ -148,6 +148,8 @@
                                 <%if(info.rating){%>
                                     <label><%=info.rating%>/5</label>
                                 <%}else{%> 
+                                    <form action="/customer/bookingdetails/add_rating" method="POST">
+                                    <input name="booking_id" type="hidden" value="<%=info.booking_id%>">
                                     <div class="rate">
                                         <input type="radio" id="star5" name="rate" value="5" />
                                         <label for="star5" title="text">5 stars</label>
@@ -160,7 +162,8 @@
                                         <input type="radio" id="star1" name="rate" value="1" />
                                         <label for="star1" title="text">1 star</label>
                                     </div>
-                                    &nbsp;<button type="button" class="btn btn-primary">Add rating</button><br><br></label>
+                                    &nbsp;<button type="submit" class="btn btn-primary">Add rating</button><br><br></label>
+                                    </form>
                                 <%}%>
                             </div>
                         </div>
@@ -173,13 +176,16 @@
                                     <label><%=info.review%></label>
                                 <%}else{%> 
                                     <label>
+                                        <form action="/customer/bookingdetails/add_review" method="POST">
                                         <div class="input-group">
-                                            <textarea class="form-control" aria-label="With textarea"></textarea>
+                                            <textarea class="form-control" aria-label="With textarea" name="review"></textarea>
+                                            <input name="booking_id" type="hidden" value="<%=info.booking_id%>">
                                             <div class="input-group-append">
-                                                <button type="button" class="btn btn-primary">Add review</button>
+                                                <button type="submit" class="btn btn-primary">Add review</button>
                                             </div>
                                             
                                         </div>
+                                        </form>
                                         <br><br></label>
                                 <%}%>
                             </div>
