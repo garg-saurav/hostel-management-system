@@ -28,7 +28,6 @@ exports.get_add_room = async (req, res, next) => {
                         path: '/add_room',
                         room_type: x.rows
                     }
-                        //console.log(x.rows)
                     )
                 });
             }

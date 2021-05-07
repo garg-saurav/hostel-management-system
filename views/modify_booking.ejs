@@ -1,0 +1,55 @@
+<%- include('./includes/head.ejs') %>
+</head>
+
+<body>
+<%- include('./includes/navigation.ejs') %>
+<div class="container">
+<div class="col-sm-8 col-sm-offset-3">
+    <br><br>
+
+    <h1></span> Modify Booking</h1>
+
+    <!-- SEARCH FORM -->
+    <form action="/customer/bookingdetails/post_modify_booking" method="post">
+        
+        <input name="booking_id" type="hidden" value="<%=info.booking_id%>">
+        <input name="has_started" type="hidden" value="<%=has_started%>">
+        <% if (!has_started) {%>
+            <div class="form-group">
+                <label>New Check in Date</label>
+                <input type="date" class="form-control" name="check_in_date" required>
+            </div>
+            <% }%>
+        
+        <div class="form-group">
+            <label>New Check out Date</label>
+            <input type="date" class="form-control" name="check_out_date" required>
+        </div>
+        <br>
+        <h5>
+            Select list of services
+        </h5>
+        <% if (num_services===0) {%>
+            <br>
+            <h6>No service available!</h6>
+            <% }%>
+        
+                <% services.forEach((item)=>{%>
+        <input type="checkbox"  name="services" value="<%=item.service_type%>">
+        <label> <%=item.service_type%>, Rate per month: <%=item.rate_per_month%></label><br>
+        <%});%>
+        <br><br>
+        
+        
+        
+
+        <button type="submit" class="btn btn-warning btn-lg">Submit Request</button>
+    </form>
+
+    <hr>
+
+    <!-- <p>Already have an account? <a href="/login">Login</a></p> -->
+
+</div>
+</div>
+<%- include('./includes/end.ejs') %> 

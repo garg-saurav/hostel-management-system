@@ -15,6 +15,14 @@
               <input type="submit" class="btn btn-primary float-right" style="margin-right: 10px;" value="Register as customer"></input>
             </form>
           <%}%>
+          <form action="/owner/view_modif_req" method="GET">
+            <input name="email_id" type="hidden" value="<%= email_id%>">
+            <input type="submit" class="btn btn-warning float-right" style="margin-right: 10px;" value="View Modification requests"></input>
+          </form>
+          <form action="/owner/view_cancel_req" method="GET">
+            <input name="email_id" type="hidden" value="<%= email_id%>">
+            <input type="submit" class="btn btn-warning float-right" style="margin-right: 10px;" value="View Cancellation requests"></input>
+          </form>
           <br><br>
           <div class="row gutters-sm">
             <div class="col-md-4 mb-3">

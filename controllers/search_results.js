@@ -25,7 +25,6 @@ exports.get_results = async (req, res, next) => {
             var max_rent = req.query.max_rent;
             var AC = req.query.AC; 
             hostel_search = new Search(address, check_in_date, check_out_date, num_beds, min_rent, max_rent, AC);
-            // console.log(hostel_search);
             hostels_res = await hostel_search.get_hostels(); //row= building_id, building_name, addr, rooms_type_id, num_rooms, additional_info
 
             res.render('search_result', {

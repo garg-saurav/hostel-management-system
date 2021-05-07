@@ -19,6 +19,10 @@ module.exports = class Building {
         }
     }
 
+    async get_services() {
+        return pool.query('SELECT service_type, rate_per_month FROM services WHERE building_id = $1', [this.building_id]);
+    }
+
     async get_rooms_type() {
         return pool.query('SELECT * FROM rooms_type WHERE building_id = $1', [this.building_id]);
     }

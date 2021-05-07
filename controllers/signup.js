@@ -16,7 +16,6 @@ exports.get_signup = (req, res, next) => {
 };
 
 exports.post_reguser = async (req, res, next) => {
-    // console.log(req);
     const email = req.body.email;
     const passwd = await bcrypt.hash(req.body.password, 10);
     const name = req.body.name;

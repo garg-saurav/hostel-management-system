@@ -2,6 +2,7 @@ const express = require('express');
 
 const hostelRequests = require('../controllers/hostel_requests');
 const hostelReqDet = require('../controllers/hostel_reqdet');
+const hostelDetails = require('../controllers/hostel_details_manager');
 
 const router = express.Router()
 
@@ -11,5 +12,7 @@ router.post('/hostel_requests',hostelRequests.post_hostel_requests);
 
 router.get('/hostel_reqdet',hostelReqDet.get_hostel_reqdet);
 router.post('/hostel_reqdet',hostelReqDet.post_hostel_reqdet);
+
+router.get('/hostel_details',hostelDetails.get_hostel_details);
 
 module.exports = router;
