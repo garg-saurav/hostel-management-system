@@ -1,0 +1,53 @@
+<%- include('./includes/head.ejs') %>
+  <link rel="stylesheet" href="../public/css/profile.css">
+  </head>
+
+  <body>
+    <%- include('./includes/navigation.ejs') %>
+      <br>
+      <div class="container">
+        <div class="main-body">
+          <hr>
+            <h3 class="text-center">New Hostel Requests</h3>
+            <hr>
+            <div style="padding-bottom: 20px;
+                max-height: 70vh;
+                overflow-x: hidden;
+                overflow-y: auto;
+                text-align:justify;">
+
+                <% if (num_requests===0) {%>
+                    <br><h5>No new requests!</h5>
+                <% }%>
+              
+                <% requests.forEach((item)=>{%> 
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <%=item.request_id%> : <%=item.building_name%>
+                                <form action="/manager/hostel_requests" method="POST">
+                                    <input name="request_id" type="hidden" value="<%=item.request_id%>">
+                                    <button type="submit" class="btn btn-info"
+                                        style="float: right; width:200px;">View more details...</button>
+                                </form>
+                            </h5>
+                            <p>
+                                <%=item.addr%>
+                            </p>
+                            <p>
+                                Request Placed on: <%=item.time_stamp%>
+                            </p>
+                            <p>
+                                Owner: <%=item.name%>
+                            </p>
+                            <p>
+                                Owner Contact: <%=item.phone_number%> <%=item.email_id%>
+                            </p>
+                        </div>
+                        <br>
+                    </div>
+                    <br>
+                <%});%> 
+            </div>
+          </script>
+  </body>
