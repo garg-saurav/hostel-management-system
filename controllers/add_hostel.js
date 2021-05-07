@@ -1,5 +1,6 @@
 const Hostel = require('../models/hostel');
 const Person = require('../models/person');
+const Manager = require('../models/manager');
 const verify = require('../private/verify');
 
 exports.get_add_hostel = async (req, res, next) => {
@@ -7,13 +8,13 @@ exports.get_add_hostel = async (req, res, next) => {
     if (decoded) {
         person = new Person(decoded.email);
         const user = await person.get_user();
+        const cities = (await (new Manager(null, null, null, null, null, null)).get_cities()).rows.map(e => e.city);
         if (user.rowCount == 0) {
             res.send('<script>alert("Details not found"); window.location.href = "/login";</script>');
         } else {
             res.render('add_hostel', {
                 pageTitle: 'Add Hostel',
-                services: []
-                // todo
+                cities: cities
             });
         }
     }
@@ -27,7 +28,7 @@ exports.post_add_hostel = async (req, res, next) => {
     const city = req.body.city;
     const addr = req.body.address;
     const additional = req.body.additional;
-    const services = req.body.servicenames;
+    const services = JSON.parse(req.body.servicenames);
     const images = req.body.hostelimages;
     const decoded = verify.authenticate(req);
 

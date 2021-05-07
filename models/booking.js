@@ -61,7 +61,7 @@ module.exports = class Booking{
             const end_date = details.end_date;
             const res = await pool.query('SELECT COALESCE(MAX(request_id),0)+1 as id FROM modification_request;');
             const request_id = res.rows[0].id;
-            await pool.query('INSERT INTO modification_request VALUES($1,$2,$3,$4,True,NOW(),null,null)', [request_id, this.booking_id, start_date, end_date]);
+            await pool.query('INSERT INTO modification_request VALUES($1,$2,$3,$4,True,NOW(),$5,$6)', [request_id, this.booking_id, start_date, end_date,null,null]);
             await pool.query('COMMIT;');
         }
         catch (e) {
@@ -76,7 +76,7 @@ module.exports = class Booking{
             await pool.query('BEGIN;');
             const res = await pool.query('SELECT COALESCE(MAX(request_id),0)+1 as id FROM modification_request;');
             const request_id = res.rows[0].id;
-            await pool.query('INSERT INTO modification_request VALUES($1,$2,$3,$4,False,NOW(),null,null)', [request_id, this.booking_id, check_in_date, check_out_date]);
+            await pool.query('INSERT INTO modification_request VALUES($1,$2,$3,$4,$5,NOW(),$6,$7)', [request_id, this.booking_id, check_in_date, check_out_date,false,null,null]);
             for (let i in services) {
                 await pool.query('INSERT INTO services_modify VALUES ($1,$2)', [request_id, services[i]]);
             }
