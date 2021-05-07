@@ -73,7 +73,6 @@ module.exports = class Booking{
 
     async enter_modification_request(check_in_date, check_out_date, services) {
         try {
-            // console.log(check_out_date);
             await pool.query('BEGIN;');
             const res = await pool.query('SELECT COALESCE(MAX(request_id),0)+1 as id FROM modification_request;');
             const request_id = res.rows[0].id;

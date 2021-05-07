@@ -1,7 +1,6 @@
 <%- include('./includes/head.ejs') %>
 <script>
-    var all_names = [];
-    var all_rates = [];
+    var dyn_list = [];
     function addItem(){
         var present = false;
         var ul = document.getElementById("dynamic-list");
@@ -10,8 +9,8 @@
         if(!servicename.value || !servicerate.value){
             return;
         }
-        for(var i=0; i<all_names.length; i++){
-            if(all_names[i]==servicename.value){
+        for(var i=0; i<dyn_list.length; i++){
+            if (dyn_list[i][0] == servicename.value) {
                 present = true;
                 break;
             }
@@ -21,13 +20,9 @@
             li.setAttribute('id',servicename.value);
             li.appendChild(document.createTextNode(servicename.value+" - Rs. "+servicerate.value+" pm"));
             ul.appendChild(li);
-            all_names.push(servicename.value);
-            all_rates.push(servicerate.value);
-            var inp1 = document.getElementById("servicenames");
-            var inp2 = document.getElementById("servicerates");
-            inp1.setAttribute('value',JSON.stringify(all_names));
-            inp2.setAttribute('value',JSON.stringify(all_rates));
-            console.log(all_names);
+            dyn_list[dyn_list.length] = [servicename.value,servicerate.value];
+            var inp = document.getElementById("servicenames");
+            inp.setAttribute('value', JSON.stringify(dyn_list));
         }
     }
 
@@ -39,8 +34,8 @@
         if(!servicename.value){
             return;
         }
-        for(var i=0; i<all_names.length; i++){
-            if(all_names[i]==servicename.value){
+        for(var i=0; i<dyn_list.length; i++){
+            if(dyn_list[i][0]==servicename.value){
                 present = true;
                 index = i;
                 break;
@@ -49,13 +44,9 @@
         if(present){
             var item = document.getElementById(servicename.value);
             ul.removeChild(item);
-            all_names.splice(index, 1);
-            all_rates.splice(index, 1);
-            var inp = document.getElementById("services");
-            var inp1 = document.getElementById("servicenames");
-            var inp2 = document.getElementById("servicerates");
-            inp1.setAttribute('value',JSON.stringify(all_names));
-            inp2.setAttribute('value',JSON.stringify(all_rates));
+            dyn_list.splice(index, 1);
+            var inp = document.getElementById("servicenames");
+            inp1.setAttribute('value',JSON.stringify(dyn_list));
         }
     }
 </script>
@@ -98,7 +89,6 @@
                             <br><br>
                             
                             <input type="text" class="form-control" name="servicenames" id="servicenames" hidden>
-                            <input type="text" class="form-control"  name="servicerates" id="servicerates" hidden>
                         </div>
                         <div class="form-group">
                             <label>Images</label><br>

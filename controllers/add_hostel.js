@@ -13,6 +13,7 @@ exports.get_add_hostel = async (req, res, next) => {
             res.render('add_hostel', {
                 pageTitle: 'Add Hostel',
                 services: []
+                // todo
             });
         }
     }
@@ -26,8 +27,10 @@ exports.post_add_hostel = async (req, res, next) => {
     const city = req.body.city;
     const addr = req.body.address;
     const additional = req.body.additional;
-    const services = req.body.services;
-    const photos = req.body.photos;
+    const services = req.body.servicenames;
+    const images = req.body.hostelimages;
+
+    console.log(name, city, addr, additional, services, images);
 
     const decoded = verify.authenticate(req);
 
