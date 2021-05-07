@@ -61,7 +61,8 @@ exports.post_results = async (req, res, next) => {
             const rooms_type_id = encodeURIComponent(req.body.rooms_type_id);
             const check_in_date = encodeURIComponent(req.body.check_in_date);
             const check_out_date = encodeURIComponent(req.body.check_out_date);
-            // console.log(building_id);
+
+            // todo: send above details to /customer/book_room page
             res.redirect('/customer/book_room/?building_id=' + building_id + '&rooms_type_id=' + rooms_type_id + '&check_in_date=' + check_in_date + '&check_out_date=' + check_out_date);
            
             
