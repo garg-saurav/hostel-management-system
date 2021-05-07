@@ -12,7 +12,7 @@ module.exports = class Request {
     async view_hostel_requests(){
         const res = await pool.query('SELECT * FROM person NATURAL JOIN regional_manager WHERE email_id=$1;',[this.email]);
         const city = res.rows[0].city;
-        return pool.query("SELECT request_id, r.city as city, building_name, location_point, r.addr as addr, TO_CHAR(r.time_stamp, 'dd/mm/yyyy') as time_stamp, building_type, approval, comment, additional_info, p.name as name, p.phone_number as phone_number, p.email_id as email_id  FROM request_new_hostel AS r INNER JOIN person AS p ON r.hostel_owner_id=p.person_id WHERE r.city=$1 and approval is null ORDER BY time_stamp desc;", [city]);
+        return pool.query("SELECT request_id, r.city as city, building_name, location_point, r.addr as addr, TO_CHAR(r.time_stamp, 'dd/mm/yyyy') as time_stamp, building_type, approval, comment, additional_info, p.name as name, p.phone_number as phone_number, p.email_id as email_id  FROM request_new_hostel AS r INNER JOIN person AS p ON r.hostel_owner_id=p.person_id WHERE r.city=$1 and approval is null ORDER BY r.time_stamp desc;", [city]);
     }
 
     async get_all_details() {
@@ -73,7 +73,7 @@ module.exports = class Request {
         try{
             const res = await pool.query('SELECT person_id FROM person where email_id = $1;', [this.email]);
             const hid = res.rows[0].person_id;
-            return pool.query("SELECT request_id, b.booking_id as booking_id, bd.building_id as building_id, building_name, room_no, TO_CHAR(time_stamp, 'dd/mm/yyyy') as time_stamp, TO_CHAR(start_date, 'dd/mm/yyyy') as start_date, TO_CHAR(end_date, 'dd/mm/yyyy') as end_date,TO_CHAR(new_start_date, 'dd/mm/yyyy') as new_start_date, TO_CHAR(new_end_date, 'dd/mm/yyyy') as new_end_date, location_point, bd.addr as addr, name, email_id, phone_number FROM (((modification_request as m INNER JOIN booking as b on m.booking_id=b.booking_id) INNER JOIN building as bd ON bd.building_id=b.building_id) INNER JOIN person as p ON b.customer_id=p.person_id) WHERE m.cancelled = True AND approval is null AND bd.hostel_owner_id=$1 ORDER BY time_stamp desc;", [hid]);
+            return pool.query("SELECT request_id, b.booking_id as booking_id, bd.building_id as building_id, building_name, room_no, TO_CHAR(time_stamp, 'dd/mm/yyyy') as time_stamp, TO_CHAR(start_date, 'dd/mm/yyyy') as start_date, TO_CHAR(end_date, 'dd/mm/yyyy') as end_date,TO_CHAR(new_start_date, 'dd/mm/yyyy') as new_start_date, TO_CHAR(new_end_date, 'dd/mm/yyyy') as new_end_date, location_point, bd.addr as addr, name, email_id, phone_number FROM (((modification_request as m INNER JOIN booking as b on m.booking_id=b.booking_id) INNER JOIN building as bd ON bd.building_id=b.building_id) INNER JOIN person as p ON b.customer_id=p.person_id) WHERE m.cancelled = False AND approval is null AND bd.hostel_owner_id=$1 ORDER BY time_stamp desc;", [hid]);
         } catch (e){
             throw e;
         }
