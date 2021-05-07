@@ -46,6 +46,6 @@ exports.post_hostel_reqdet = async (req, res, next) => {
         res.redirect('/manager/hostel_requests');
     }
     else {
-        res.send('<script>alert("Please login first"); window.location.href = "/owner/login";</script>');
+        res.send('<script>alert("Please login first"); window.location.href = "/login";</script>');
     }
 }

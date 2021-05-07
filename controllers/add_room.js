@@ -65,6 +65,6 @@ exports.post_add_room = async (req, res, next) => {
         }
     }
     else {
-        res.send('<script>alert("Please login first"); window.location.href = "/owner/login";</script>');
+        res.send('<script>alert("Please login first"); window.location.href = "/login";</script>');
     }
 }

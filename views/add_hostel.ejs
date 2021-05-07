@@ -10,14 +10,12 @@
         if(!servicename.value || !servicerate.value){
             return;
         }
-        console.log(all_names);
         for(var i=0; i<all_names.length; i++){
             if(all_names[i]==servicename.value){
                 present = true;
                 break;
             }
         }
-        console.log(present);
         if(!present){
             var li = document.createElement("li");
             li.setAttribute('id',servicename.value);
@@ -29,6 +27,7 @@
             var inp2 = document.getElementById("servicerates");
             inp1.setAttribute('value',JSON.stringify(all_names));
             inp2.setAttribute('value',JSON.stringify(all_rates));
+            console.log(all_names);
         }
     }
 
@@ -69,7 +68,7 @@
                     <h1>Add Hostel</h1>
 
                     <!-- ADD HOSTEL FORM -->
-                    <form action="/owner/add_hostel" method="POST">
+                    <form action="/owner/add_hostel" method="POST" enctype="multipart/form-data">
                         <div class="form-group">
                             <label>Enter Building Name</label>
                             <input type="text" class="form-control" name="name" required>
@@ -92,14 +91,18 @@
 
                             <input type="text" id="servicename" size=15 placeholder="Service name"/>
                             <input type="number" id="servicerate" size=14 placeholder="Rate per month"/>
-                            <button onclick="addItem()" class="btn btn-warning">Add service</button>
+                            <button type="button" onclick="addItem()" class="btn btn-warning">Add service</button>
                             <br><br>
                             <input type="text" id="removeservicename" size=15 placeholder="Service name"/>
-                            <button onclick="removeItem()" class="btn btn-danger">Remove service</button>
+                            <button type="button" onclick="removeItem()" class="btn btn-danger">Remove service</button>
                             <br><br>
                             
-                            <input type="text" name="servicenames" id="servicenames" disabled hidden>
-                            <input type="text" name="servicerates" id="servicerates" disabled hidden>
+                            <input type="text" class="form-control" name="servicenames" id="servicenames" hidden>
+                            <input type="text" class="form-control"  name="servicerates" id="servicerates" hidden>
+                        </div>
+                        <div class="form-group">
+                            <label>Images</label><br>
+                            <input type="file" name="hostelimages" multiple/>
                         </div>
                         <button type="submit" class="btn btn-primary btn-lg">Submit</button>
                     </form>
