@@ -92,13 +92,19 @@
                             <%=info.addr%>
                         </h6>
                         <br>
-                        <%if(!info.has_ended){%>
+                        <%if(!to_modify){%>
+                            <h6>
+                                **There is a pending modification request on this booking!
+                            </h6>
+                            <%}%>
+                        <%if(!info.has_ended && to_modify){%>
                             <form action="/customer/bookingdetails/modify_booking" method="POST">
                                 <input name="booking_id" type="hidden" value="<%=info.booking_id%>">
+                                <input name="has_started" type="hidden" value="<%=info.has_started%>">
                             <button type="submit" class="btn btn-warning">Modify booking</button><br><br>
                             </form>
                         <%}%>
-                        <%if(!info.has_started){%>
+                        <%if(!info.has_started && to_modify){%>
                             <form action="/customer/bookingdetails/cancel_booking" method="POST">
                                 <input name="booking_id" type="hidden" value="<%=info.booking_id%>">
                             <button type="submit" class="btn btn-danger">Cancel booking</button>
