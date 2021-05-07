@@ -70,10 +70,10 @@ module.exports = class Room {
             const cust_id = (await pool.query('SELECT person_id as id FROM person WHERE email_id = $1;', [email])).rows[0].id;
             await pool.query('INSERT INTO booking VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)', [id, this.building_id, this.rooms_type_id, this.room_no, cust_id, check_in_date, check_out_date, null, null, false]);
             for (let e in guests) {
-                await pool.query('INSERT INTO booking_guests VALUES($1,$2,$3,$4);', [id, e[0], e[1], e[2]]);
+                await pool.query('INSERT INTO booking_guests VALUES($1,$2,$3,$4);', [id, guests[e][0], guests[e][1], guests[e][2]]);
             }
             for (let e in services) {
-                await pool.query('INSERT INTO booking_services VALUES($1,$2);', [id, e]);
+                await pool.query('INSERT INTO booking_services VALUES($1,$2);', [id, services[e]]);
             }
             await pool.query('COMMIT;');
         }
