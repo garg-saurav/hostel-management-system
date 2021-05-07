@@ -4,54 +4,79 @@
     <body>
         <%- include('./includes/navigation.ejs') %>
             <div class="container">
-                <form method="POST">
-                    <div class="row col-sm-12">
-                        <div class="col-sm card">
-                            <div class="row">
-                                <input id="building_id" type="hidden" value="<%= id %>">
-                                <input id="rooms_type_id" type="hidden" value="<%= rooms_type %>">
-                                <div class="col-sm">
-                                    <h6>Hostel</h6>
-                                </div>
-                                <div class="col-sm text-secondary">
-                                    <h6 id="name">
-                                        <%= name %>
-                                    </h6>
-                                </div>
+                <div class="row col-sm-12">
+                    <div class="col-sm card">
+                        <div class="row">
+                            <div class="col-sm">
+                                <h6>Hostel</h6>
                             </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-sm">
-                                    <h6>Rent</h6>
-                                </div>
-                                <div class="col-sm text-secondary">
-                                    <h6>
-                                        <%= rent %>
-                                    </h6>
-                                </div>
-                                <div class="col-sm">
-                                    <h6>Beds</h6>
-                                </div>
-                                <div class="col-sm text-secondary">
-                                    <h6>
-                                        <%= num_beds %>
-                                    </h6>
-                                </div>
-                                <div class="col-sm">
-                                    <h6>AC</h6>
-                                </div>
-                                <div class="col-sm text-secondary">
-                                    <h6>
-                                        <%= ac %>
-                                    </h6>
-                                </div>
+                            <div class="col-sm text-secondary">
+                                <h6 id="name">
+                                    <%= name %>
+                                </h6>
                             </div>
                         </div>
-                        <div class="col-sm">
-                            <button type="submit" class="btn btn-warning btn-lg">Add Room</button>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm">
+                                <h6>Rent</h6>
+                            </div>
+                            <div class="col-sm text-secondary">
+                                <h6>
+                                    <%= rent %>
+                                </h6>
+                            </div>
+                            <div class="col-sm">
+                                <h6>Beds</h6>
+                            </div>
+                            <div class="col-sm text-secondary">
+                                <h6>
+                                    <%= num_beds %>
+                                </h6>
+                            </div>
+                            <div class="col-sm">
+                                <h6>AC</h6>
+                            </div>
+                            <div class="col-sm text-secondary">
+                                <h6>
+                                    <%= ac %>
+                                </h6>
+                            </div>
                         </div>
                     </div>
-                </form>
+                    <div class="col-sm">
+                        <form method="POST">
+                            <label>Room Number</label>
+                            <input type="number" class="form-control" name="room_no" required>
+                            <button type="submit" class="btn btn-warning btn-lg">Add Room</button>
+                        </form>
+                    </div>
+                </div>
+                <hr>
+                <h3 class="text-center">Your bookings</h3>
+                <hr>
+                <div style="padding-bottom: 20px;
+                              max-height: 50vh;
+                              overflow-x: hidden;
+                              overflow-y: auto;
+                              text-align:justify;">
+
+                    <% if (rooms.length===0) {%>
+                        <br>
+                        <h5>No rooms so far!</h5>
+                        <%}else{%>
+                            <% rooms.forEach((item)=>{%>
+                                <!-- <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">
+                                            Room Number : <%= item %>
+                                        </h5>
+                                    </div><br>
+                                </div>
+                                <br> -->
+                                <%});%>
+                </div>
             </div>
+
 
             <%- include('./includes/end.ejs') %>

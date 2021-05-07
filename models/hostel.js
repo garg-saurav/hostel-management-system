@@ -12,6 +12,10 @@ module.exports = class Hostel {
         this.photos = photos;
     }
 
+    async get_owner() {
+        return pool.query('SELECT email_id FROM building JOIN person ON building.hostel_owner_id = person.person_id AND building.building_id = $1', [this.building_id]);
+    }
+
     async add_hostel_request() {
         try {
             await pool.query('BEGIN;');
