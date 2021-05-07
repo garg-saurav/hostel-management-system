@@ -1,0 +1,133 @@
+<%- include('./includes/head.ejs') %>
+<script>
+    var dyn_list = [];
+    function addItem() {
+        var present = false;
+        var ul = document.getElementById("dynamic-list");
+        var name = document.getElementById("name");
+        var dob = document.getElementById("dob");
+        var phone_number = document.getElementById("phone_number");
+        if (!name.value || !dob.value || !phone_number.value) {
+            return;
+        }
+        for (var i = 0; i < dyn_list.length; i++) {
+            if (dyn_list[i][0] == name.value) {
+                present = true;
+                break;
+            }
+        }
+        if (!present) {
+            var li = document.createElement("li");
+            li.setAttribute('id', name.value);
+            li.appendChild(document.createTextNode("Name : " + name.value + ", DoB : " + dob.value + ", Phone No : "+phone_number.value));
+            ul.appendChild(li);
+            dyn_list[dyn_list.length] = [name.value, dob.value, phone_number.value];
+            var inp = document.getElementById("guests");
+            inp.setAttribute('value', JSON.stringify(dyn_list));
+        }
+    }
+
+    function removeItem() {
+        var present = false;
+        var index = null;
+        var ul = document.getElementById("dynamic-list");
+        var name = document.getElementById("removeguest");
+        if (!name.value) {
+            return;
+        }
+        for (var i = 0; i < dyn_list.length; i++) {
+            if (dyn_list[i][0] == name.value) {
+                present = true;
+                index = i;
+                break;
+            }
+        }
+        if (present) {
+            var item = document.getElementById(name.value);
+            ul.removeChild(item);
+            dyn_list.splice(index, 1);
+            var inp = document.getElementById("guests");
+            inp.setAttribute('value', JSON.stringify(dyn_list));
+        }
+    }
+</script>
+</head>
+
+<body>
+    <%- include('./includes/navigation.ejs') %>
+        <br>
+        <div class="container">
+            <form action="/customer/book_room" method="POST">
+                <div class="row text-center form-group">
+                    <div class="col-sm-4">
+                        <input type="hidden" name="building_id" value="<%=building_id%>">
+                        <p> Hostel ID : <%= building_id %></p>
+                    </div>
+                    <div class="col-sm-4">
+                        <input type="hidden" name="rooms_type_id" value="<%=rooms_type_id%>">
+                        <p> Room Type ID : <%= rooms_type_id %>
+                        </p>
+                    </div>
+                    <div class="col-sm-4">
+                        <input type="hidden" name="room_no" value="<%=room_no%>">
+                        <p> Room Number : <%= room_no %>
+                        </p>
+                    </div>
+                </div>
+                <div class="row text-center form-group">
+                    <div class="col-sm-6">
+                        <input type="hidden" name="check_in_date" value="<%=check_in_date%>">
+                        <p> Check In Date : <%= check_in_date %>
+                        </p>
+                    </div>
+                    <div class="col-sm-6">
+                        <input type="hidden" name="check_out_date" value="<%=check_out_date%>">
+                        <p> Check Out Date : <%= check_out_date %>
+                        </p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-sm-8">
+                        <h3 class="text-center">Guests</h3>
+                        <ul id="dynamic-list"></ul>
+
+                        <div class="row">
+                            <div class="col-sm">
+                                <input type="text" class="form-control" id="name" placeholder="Name" />
+                            </div>
+                            <div class="col-sm">
+                                <input type="date" class="form-control" id="dob" placeholder="DoB" />
+                            </div>
+                            <div class="col-sm">
+                                <input type="number" class="form-control" id="phone_number" placeholder="Phone No" />
+                            </div>
+                        </div>
+                        <button type="button" onclick="addItem()" class="btn btn-warning">Add Guest</button>
+                        <br><br>
+                        <input type="text" class="form-control" id="removeguest" placeholder="Name" />
+                        <button type="button" onclick="removeItem()" class="btn btn-danger">Remove Guest</button>
+                        <br><br>
+                        <input type="text" class="form-control" name="guests" id="guests" hidden>
+                    </div>
+                    <div class="form-group col-sm-4">
+                                <h5>
+                                    Select services
+                                </h5>
+                                <% if (services.length===0) {%>
+                                    <br>
+                                    <h6>No service available!</h6>
+                                    <% }%>
+                                
+                                        <% services.forEach((item)=>{%>
+                                            <input type="checkbox" name="services" value="<%=item.service_type%>">
+                                            <label>
+                                                Service : <%=item.service_type%>, Rate per month: <%=item.rate_per_month%>
+                                            </label><br>
+                                            <%});%>
+
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-info" style="float: right; width:200px;">Book Room</button>
+            </form>
+        </div>
+<%- include('./includes/end.ejs') %>

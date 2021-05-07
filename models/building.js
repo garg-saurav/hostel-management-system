@@ -7,7 +7,7 @@ module.exports = class Building {
     }
 
     async get_all_details() {
-        return pool.query("SELECT * from building WHERE building_id = $1", [this.building_id]);
+        return pool.query("SELECT * from building INNER JOIN person ON person.person_id=building.hostel_owner_id WHERE building_id = $1", [this.building_id]);
     }
 
     async get_photos() {
@@ -37,7 +37,7 @@ module.exports = class Building {
     }
 
     async get_rating() {
-        return pool.query('SELECT avg(rating) as avg_rating FROM booking WHERE building_id = $1 AND rating is not null GROUP BY building_id', [this.building_id]);
+        return pool.query('SELECT COALESCE(avg(rating),0) as avg_rating FROM booking WHERE building_id = $1 AND rating is not null GROUP BY building_id', [this.building_id]);
     }
 
 };

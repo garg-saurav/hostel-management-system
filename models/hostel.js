@@ -22,11 +22,11 @@ module.exports = class Hostel {
             const res = await pool.query('SELECT COALESCE(MAX(request_id),0)+1 as id FROM request_new_hostel;');
             const id = res.rows[0].id;
             await pool.query('INSERT INTO request_new_hostel(request_id, building_name, city, hostel_owner_id, location_point, addr, building_type, additional_info, approval, comment) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10);', [id, this.name, this.city, this.owner_id, 'SRID=4326;POINT(77.21654 28.64624)', this.address,'Hostel',this.additional,null,null]);
-            for (const pic in this.photos) {
-                await pool.query('INSERT INTO request_hostel_photos VALUES ($1,$2);', [id, pic]);
+            for (let i in this.photos) {
+                await pool.query('INSERT INTO request_hostel_photos VALUES ($1,$2);', [id, this.photos[i]]);
             }
-            for (const tup in this.services) {
-                await pool.query('INSERT INTO request_hostel_services VALUES ($1,$2,$3)', [id, tup.service_type, tup.rate_per_month]);
+            for (let i in this.services) {
+                await pool.query('INSERT INTO request_hostel_services VALUES ($1,$2,$3)', [id, this.services[i][0], this.services[i][1]]);
             }
             await pool.query('COMMIT;')
         } catch (e) {
@@ -42,7 +42,7 @@ module.exports = class Hostel {
     async view_hostel_request() {
         try {
             await pool.query('BEGIN;');
-            await pool.query('UPDATE request_new_hostel SET approval=True and comment=$2 WHERE request_id=$1;');
+            await pool.query('UPDATE request_new_hostel SET approval=True, comment=$2 WHERE request_id=$1;');
             await pool.query('INSERT INTO building(building_name, hostel_owner_id, city, addr,building_type, additional_info) VALUES($1, $2, $3, $4, $5, $6);');
             await pool.query('INSERT INTO services(service_type, rate_per_month) VALUES($1, $2);');
             await pool.query('COMMIT;')

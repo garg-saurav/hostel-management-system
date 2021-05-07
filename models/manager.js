@@ -14,6 +14,10 @@ module.exports = class Manager {
         return pool.query('SELECT * FROM person NATURAL JOIN regional_manager WHERE email_id=$1', [this.email]);
     }
 
+    async get_cities() {
+        return pool.query('SELECT city FROM regional_manager;');
+    }
+
     async reg_as_customer(){
         try{
             await pool.query('BEGIN;');
