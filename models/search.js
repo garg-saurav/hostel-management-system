@@ -30,6 +30,6 @@ module.exports = class Search {
     }
 
     async get_free_room() {
-        return pool.query('SELECT MIN(room_no) AS room_num FROM room WHERE building_id = $1 AND rooms_type_id = $2 AND available = True AND NOT EXISTS(SELECT * FROM booking WHERE booking.room_no = room.room_no AND cancelled <> True AND NOT (start_date > $4 OR end_date < $3))',[this.building_id,this.rooms_type_id,this.check_in_date,this.check_out_date]);
+        return pool.query('SELECT MIN(room_no) AS room_num FROM room WHERE building_id = $1 AND rooms_type_id = $2 AND available = True AND NOT EXISTS(SELECT * FROM booking WHERE booking.room_no = room.room_no AND booking.rooms_type_id = room.rooms_type_id AND booking.building_id = room.building_id AND cancelled <> True AND NOT (start_date > $4 OR end_date < $3))',[this.building_id,this.rooms_type_id,this.check_in_date,this.check_out_date]);
     }
 }
