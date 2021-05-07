@@ -93,10 +93,16 @@
                         </h6>
                         <br>
                         <%if(!info.has_ended){%>
-                            <button type="button" class="btn btn-warning">Modify booking</button><br><br>
+                            <form action="/customer/bookingdetails/modify_booking" method="POST">
+                                <input name="booking_id" type="hidden" value="<%=info.booking_id%>">
+                            <button type="submit" class="btn btn-warning">Modify booking</button><br><br>
+                            </form>
                         <%}%>
                         <%if(!info.has_started){%>
-                            <button type="button" class="btn btn-danger">Cancel booking</button>
+                            <form action="/customer/bookingdetails/cancel_booking" method="POST">
+                                <input name="booking_id" type="hidden" value="<%=info.booking_id%>">
+                            <button type="submit" class="btn btn-danger">Cancel booking</button>
+                            </form>
                         <%}%>
 
             </div>
