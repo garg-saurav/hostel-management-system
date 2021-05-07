@@ -31,6 +31,10 @@ app.get('/', (req, res) => {
 
 app.use('/', router);
 
+app.get('*', function(req, res){
+    res.redirect("/profile");
+});
+
 app.listen(port, () => {
     console.log(`App listening at http://localhost:${port}`)
 });
