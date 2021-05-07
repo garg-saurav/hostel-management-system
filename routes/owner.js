@@ -11,13 +11,13 @@ const router = express.Router()
 router.get('/add_hostel', add_hostel.get_add_hostel);
 router.post('/add_hostel', add_hostel.post_add_hostel);
 
-router.get('/:building_id/:rooms_type_id', viewRoomType.view_rooms);
-router.post('/:building_id/:rooms_type_id', viewRoomType.add_room);
-//router.get('/hostel/add_room_type',addRoomTypeCon.get_add_room_type);
-//router.post('/hostel/add_room_type',addRoomTypeCon.post_add_room_type);
-
 router.post('/hostel/make_new_rooms_type', viewHostelCon.new_rooms_type);
 router.post('/hostel/view_rooms_type', viewHostelCon.view_rooms_type);
+
+router.get('/room_type_details/:building_id/:rooms_type_id', viewRoomType.view_rooms);
+router.post('/room_type_details/:building_id/:rooms_type_id', viewRoomType.add_room);
+//router.get('/hostel/add_room_type',addRoomTypeCon.get_add_room_type);
+//router.post('/hostel/add_room_type',addRoomTypeCon.post_add_room_type);
 
 router.get('/hostel', viewHostelCon.get_view_hostel);
 

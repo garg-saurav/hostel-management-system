@@ -49,12 +49,14 @@ module.exports = class Room {
         }
     }
     async get_residents() {
-        const results = await pool.query('SELECT b.room_no, bg.* FROM booking_guests as bg JOIN booking as b ON b.booking_id = bg.booking_id WHERE b.building_id = $1 AND b.rooms_type_id = $2 AND b.start_date <= CURRENT_DATE AND b.end_date > CURRENT_DATE ORDER BY bg.booking_id;',[this.building_id,this.rooms_type_id]);
+        const results = await pool.query('SELECT b.room_no, b.booking_id, bg.name, bg.dob, bg.phone_number FROM booking_guests as bg JOIN booking as b ON b.booking_id = bg.booking_id WHERE b.building_id = $1 AND b.rooms_type_id = $2 AND b.start_date <= CURRENT_DATE AND b.end_date > CURRENT_DATE ORDER BY bg.booking_id;',[this.building_id,this.rooms_type_id]);
         var grouped = {};
+        var bookings = {};
         results.rows.forEach(function (x) {
             grouped[x.room_no] = grouped[x.room_no] || [];
-            grouped[x.room_no].push([x.booking_id,x.name, x.dob, x.phone_number]);
+            grouped[x.room_no].push({ "name": x.name, "dob": x.dob.toLocaleDateString(), "phone_number":x.phone_number });
+            bookings[x.room_no] = x.booking_id;
         });
-        return grouped;
+        return [grouped, bookings];
     }
 }

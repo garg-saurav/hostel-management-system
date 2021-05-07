@@ -34,7 +34,8 @@ exports.view_rooms = async (req, res, next) => {
         num_beds: details[0].num_beds,
         ac: details[0].ac,
         rooms: rooms.map(e => e.room_no),
-        residents: residents
+        guests: residents[0],
+        bookings: residents[1]
     });
 }
 
