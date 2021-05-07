@@ -15,7 +15,11 @@ exports.get_view_hostel = async (req, res, next) => {
         const details = await building.get_all_details();
         const pics = await building.get_photos();
         const rating = await building.get_rating();
-        rating_num = parseFloat(rating.rows[0].avg_rating);
+        if(rating.rowCount){
+            rating_num = parseFloat(rating.rows[0].avg_rating);
+        }else{
+            rating_num = 0;
+        }
         rating_num = Math.round(rating_num * 100) / 100;
         
         const rooms_type = await building.get_rooms_type();

@@ -41,7 +41,6 @@ module.exports = class Room {
             const res = await pool.query('SELECT COALESCE(MAX(rooms_type_id),0)+1 as id FROM rooms_type WHERE building_id=$1;', [this.building_id]);
             const id = res.rows[0].id;
             await pool.query('INSERT INTO rooms_type(building_id, rooms_type_id, rent, num_beds, ac) VALUES($1, $2, $3, $4, $5);', [this.building_id, id, this.rent, this.num_beds, this.ac]);
-            await pool.query('INSERT INTO rooms_type_photos(building_id, rooms_type_id, photo) VALUES($1, $2, $3);', [this.building_id, id,]);
             await pool.query('COMMIT;');
         } catch (e) {
             await pool.query('ROLLBACK;');
