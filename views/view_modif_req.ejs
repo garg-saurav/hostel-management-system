@@ -1,0 +1,118 @@
+<%- include('./includes/head.ejs') %>
+  <link rel="stylesheet" href="../public/css/profile.css">
+  </head>
+
+  <body>
+    <%- include('./includes/navigation.ejs') %>
+      <br>
+      <div class="container">
+        <div class="main-body">
+            <h3 class="text-center">Modification Requests</h3>
+          <hr>
+          <div style="padding-bottom: 20px;
+              max-height: 50vh;
+              overflow-x: hidden;
+              overflow-y: auto;
+              text-align:justify;">
+
+            <% if (num_requests===0) {%>
+              <br>
+              <h5>No Modification Requests!</h5>
+              <% }%>
+
+                <% requests.forEach((item)=>{%>
+                    <div>
+                        <div class="row">
+                            <div class="col-md-4">
+                            </div>
+                            <div class="col-md-6">
+                                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Booking details</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Customer details</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="tab-content profile-tab" id="myTabContent">
+                                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Start date</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><%=item.start_date%> changed to => <%=item.new_start_date%></p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>End date</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><%=item.end_date%> changed to => <%=item.new_end_date%></p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Building:</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><%=item.building_name%></p>
+                                                <p><%=item.addr%></p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Name</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><%=item.name%></p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Email</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><%=item.email_id%></p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <label>Contact</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p><%=item.phone_number%></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <form action="/owner/view_modif_req" method="post">
+                            <input name="request_id" type="hidden" value="<%=item.request_id%>">
+                            <div class="form-group">
+                                <label>Enter Comment</label>
+                                <input type="text" class="form-control" name="comment" required>
+                            </div> <br>
+                            <div class="form-group">
+                                <select name="approve_or_reject">
+                                    <option value="approve">Approve</option>
+                                    <option value="reject">Reject</option>
+                                </select>
+                            </div>
+                            <br>
+                            <button type="submit" class="btn btn-warning btn-lg">Submit</button>
+                        </form>
+                        <%});%>
+                    </div>
+          </div>
