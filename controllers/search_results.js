@@ -35,6 +35,8 @@ exports.get_results = async (req, res, next) => {
                 path: '/search_result',
                 hostels: hostels_res.rows,
                 num_hostels: hostels_res.rowCount,
+                check_in_date: check_in_date,
+                check_out_date: check_out_date,
             });
 
         } else {

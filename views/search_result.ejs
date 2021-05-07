@@ -27,8 +27,8 @@
                       <form action="/customer/search_results" method="POST">
                         <input name="building_id" type="hidden" value="<%=item.building_id%>">
                         <input name="rooms_type_id" type="hidden" value="<%=item.rooms_type_id%>">
-                        <input name="check_in_date" type="hidden" value="<%=item.check_in_date%>">
-                        <input name="check_out_date" type="hidden" value="<%=item.check_out_date%>">
+                        <input name="check_in_date" type="hidden" value="<%=check_in_date%>">
+                        <input name="check_out_date" type="hidden" value="<%=check_out_date%>">
                         <button type="submit" class="btn btn-info" style="float: right; width:200px;">Book</button>
                       </form>
                     
