@@ -25,8 +25,7 @@ exports.get_add_room = async (req, res, next) => {
                 Room.view_room_type().then(x => {
                     res.render('add_room', {
                         pageTitle: 'Add Room',
-                        path: '/room/add_room',
-                        services: [],
+                        path: '/add_room',
                         room_type: x.rows
                     }
                         //console.log(x.rows)
@@ -43,6 +42,7 @@ exports.get_add_room = async (req, res, next) => {
 }
 
 exports.post_add_room = async (req, res, next) => {
+    const building_id = req.body.building_id;
     const rooms_type_id = req.body.rooms_type_id;
     const rent = req.body.rent;
     const num_beds = req.body.num_beds;

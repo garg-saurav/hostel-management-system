@@ -14,12 +14,24 @@ module.exports = class Owner {
         return pool.query('SELECT * FROM person NATURAL JOIN hostel_owner WHERE email_id=$1', [this.email]);
     }
 
+    async get_hostels_owned() {
+
+        await pool.query('BEGIN;');
+        const res = await pool.query('SELECT * FROM person NATURAL JOIN hostel_owner WHERE email_id=$1;', [this.email]);
+        const id = res.rows[0].person_id;
+        // console.log(id);
+        return pool.query('SELECT * FROM building WHERE hostel_owner_id = $1', [id]);
+    }
+
     async reg_as_customer(){
         try{
             await pool.query('BEGIN;');
             const res = await pool.query('SELECT * FROM person NATURAL JOIN hostel_owner WHERE email_id=$1;',[this.email]);
             const id = res.rows[0].person_id;
-            const passwd = res.rows[0].passwd;
+                // bookings: user_bookings.rows,
+                //     numbookings: user_bookings.rowCount,
+                //     has_ended: user_bookings.has_ended,
+                //     has_started: user_bookings.has_started,const passwd = res.rows[0].passwd;
             await pool.query('INSERT INTO customer VALUES ($1, $2);',[id, passwd]);
             await pool.query('COMMIT;')
         }catch(e){

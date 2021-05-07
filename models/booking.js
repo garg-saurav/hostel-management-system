@@ -10,6 +10,10 @@ module.exports = class Booking{
         return pool.query("SELECT building_id, rooms_type_id, booking_id, room_no, customer_id, TO_CHAR(start_date, 'dd/mm/yyyy') as start_date, TO_CHAR(end_date, 'dd/mm/yyyy') as end_date, rating, review, cancelled, building_name, location_point, hostel_owner_id, city, addr, building_type, rent, num_beds, ac, start_date<NOW() as has_started, end_date<NOW() as has_ended  FROM booking NATURAL JOIN building NATURAL JOIN rooms_type WHERE booking_id=$1",[this.booking_id]);
     }
 
+    async get_booking_details() {
+        return pool.query('SELECT * FROM booking WHERE booking_id = $1', [this.booking_id]);
+    }
+
     async get_photos(){
         try{
             const res = await pool.query('SELECT * FROM booking WHERE booking_id=$1',[this.booking_id]);
@@ -18,6 +22,44 @@ module.exports = class Booking{
         }catch(e){
             throw e;
         }
+    }
+
+    async add_rating(rating) {
+        try {
+            await pool.query('BEGIN;');
+            await pool.query('UPDATE booking SET rating = $1 WHERE booking_id = $2;', [rating, this.booking_id]);
+        }
+        catch (e) {
+            await pool.query('ROLLBACK;');
+            throw e;
+        }
+    }
+
+    async add_review(review) {
+        try {
+            await pool.query('BEGIN;');
+            await pool.query('UPDATE booking SET review = $1 WHERE booking_id = $2;', [review, this.booking_id]);
+        }
+        catch (e) {
+            await pool.query('ROLLBACK;');
+            throw e;
+        }
+    }
+
+    async enter_cancel_booking() {
+        try {
+            await pool.query('BEGIN;');
+            const details_res = await pool.query('SELECT * FROM booking WHERE booking_id = $1', [this.booking_id]);
+            details = details_res.rows[0];
+            const start_date = details.start_date;
+            const end_date = details.end_date;
+            await pool.query('', [this.booking_id]);
+        }
+        catch (e) {
+            await pool.query('ROLLBACK;');
+            throw e;
+        }
+        
     }
 
     async get_customer_email(){

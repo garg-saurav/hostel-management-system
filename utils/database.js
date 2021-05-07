@@ -1,7 +1,7 @@
 const { Pool } = require('pg');
 
 const pool = new Pool({
-    user: 'saurav',     //your postgres username
+    user: 'postgres',     //your postgres username
     host: 'localhost', 
     database: 'projectdb', //your local database 
     password: 'postgres1234', //your postgres user password
@@ -9,6 +9,5 @@ const pool = new Pool({
 });
 
 pool.connect();
-
 
 module.exports = pool;

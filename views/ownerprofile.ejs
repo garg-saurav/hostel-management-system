@@ -75,6 +75,49 @@
               </div><br>
             </div>
           </div>
+          <hr>
+          <h3 class="text-center">Your Hostels</h3>
+          <hr>
+          <div style="padding-bottom: 20px;
+              max-height: 50vh;
+              overflow-x: hidden;
+              overflow-y: auto;
+              text-align:justify;">
+
+            <% if (num_hostels===0) {%>
+              <br>
+              <h5>No hostels under you!</h5>
+              <% }%>
+
+                <% hostels.forEach((item)=>{%>
+                 
+                    <div class="card">
+                      
+                            <div class="card-body">
+                              <h5 class="card-title">
+                                <%=item.building_name%>
+                                    
+                                      <form action="/profile" method="POST">
+                                        <input name="building_id" type="hidden" value="<%=item.building_id%>">
+                                        <button type="submit" class="btn btn-info"
+                                          style="float: right; width:200px;">View hostel</button>
+                                      </form>
+                                    
+                              </h5>
+                              
+                              <p>
+                                <%=item.addr%>
+                              </p>
+                              <p>
+                                <%=item.city%>
+                              </p>
+                            </div><br>
+                        </div>
+                        <br>
+                        <%});%>
+
+                    </div>
+          </div>
 
           </script>
   </body>
