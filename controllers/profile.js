@@ -103,3 +103,21 @@ exports.post_booking = async (req, res, next) => {
         return res.send('<script>alert("Please login first"); window.location.href = "/login";</script>');
     }
 }
+
+exports.post_analytics = async (req, res, next) => {
+
+    const decoded = verify.authenticate(req);
+    if (decoded) {
+        if (decoded.role == 'hostel_owner') {
+            res.redirect('/owner/analytics');
+        }
+        else if (decoded.role == 'regional_manager') {
+            res.redirect('/manager/analytics');
+        }
+        else {
+            //should not come here
+        }
+    } else {
+        return res.send('<script>alert("Please login first"); window.location.href = "/login";</script>');
+    }
+}

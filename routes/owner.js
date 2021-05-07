@@ -4,6 +4,8 @@ const add_hostel = require('../controllers/add_hostel');
 const addRoomCon = require('../controllers/add_room');
 const viewHostelCon = require('../controllers/view_hostel');
 const viewRoomType = require('../controllers/view_room_type');
+const analyticsCon = require('../controllers/owner_analytics');
+
 //const addRoomTypeCon = require('../controllers/add_room_type');
 
 const router = express.Router()
@@ -20,6 +22,6 @@ router.post('/room_type_details/:building_id/:rooms_type_id', viewRoomType.add_r
 //router.post('/hostel/add_room_type',addRoomTypeCon.post_add_room_type);
 
 router.get('/hostel', viewHostelCon.get_view_hostel);
-
+router.get('/analytics', analyticsCon.get_analytics);
 
 module.exports = router;

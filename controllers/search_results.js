@@ -23,7 +23,10 @@ exports.get_results = async (req, res, next) => {
             var num_beds = req.query.num_beds;
             var min_rent = req.query.min_rent;
             var max_rent = req.query.max_rent;
-            var AC = req.query.AC; 
+            var AC = req.query.AC;
+            if (!address || !check_in_date || !check_out_date || !num_beds || !min_rent || !max_rent || !AC) {
+                return res.send('<script>alert("Details not found"); window.location.href = "/customer";</script>');
+            }
             hostel_search = new Search(address, check_in_date, check_out_date, num_beds, min_rent, max_rent, AC);
             hostels_res = await hostel_search.get_hostels(); //row= building_id, building_name, addr, rooms_type_id, num_rooms, additional_info
 

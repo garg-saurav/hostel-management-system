@@ -10,6 +10,9 @@
           <form action="/logout" method="POST">
             <input type="submit" class="btn btn-danger float-right" value="Logout"></input>
           </form>
+          <form action="/analytics" method="POST">
+            <input type="submit" class="btn btn-primary float-right" value="Analytics" style="margin-right: 10px;"></input>
+          </form>
           <%if(!has_other_role){%>
             <form action="/reguser" method="POST">
               <input type="submit" class="btn btn-primary float-right" style="margin-right: 10px;" value="Register as customer"></input>
