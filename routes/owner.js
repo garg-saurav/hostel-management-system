@@ -4,6 +4,7 @@ const add_hostel = require('../controllers/add_hostel');
 const addRoomCon = require('../controllers/add_room');
 const viewHostelCon = require('../controllers/view_hostel');
 //const addRoomTypeCon = require('../controllers/add_room_type');
+const viewModifReq = require('../controllers/view_modif_req');
 
 const router = express.Router()
 
@@ -20,6 +21,9 @@ router.post('/hostel/make_new_rooms_type', viewHostelCon.new_rooms_type);
 router.post('/hostel/view_rooms_type', viewHostelCon.view_rooms_type);
 
 router.get('/hostel', viewHostelCon.get_view_hostel);
-
+router.get('/view_cancel_req', viewModifReq.get_cancel_req);
+router.post('/view_cancel_req', viewModifReq.post_cancel_req);
+router.get('/view_modif_req', viewModifReq.get_modif_req);
+router.post('/view_modif_req', viewModifReq.post_modif_req);
 
 module.exports = router;

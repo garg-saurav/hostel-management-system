@@ -67,4 +67,66 @@ module.exports = class Request {
             throw e;
         }
     }
+
+    async view_modif_requests() {
+        try{
+            const res = await pool.query('SELECT person_id FROM person where email_id = $1;', [this.email]);
+            const hid = res.rows[0].person_id;
+            return pool.query("SELECT request_id, b.booking_id as booking_id, bd.building_id as building_id, building_name, room_no, TO_CHAR(time_stamp, 'dd/mm/yyyy'), TO_CHAR(start_date, 'dd/mm/yyyy'), TO_CHAR(end_date, 'dd/mm/yyyy'), location_point, bd.addr as addr, name, email_id, phone_number FROM modification_request as m, booking as b, building as bd, person as p WHERE m.cancelled = False AND m.booking_id = b.booking_id AND b.building_id = bd.building_id AND bd.hostel_owner_id=$1 AND b.customer_id=p.person_id ORDER BY time_stamp desc;", [hid]);
+        } catch (e){
+            throw e;
+        }
+    }
+
+    async accept_modif_request() {
+        try {
+            await pool.query('BEGIN;');
+            await pool.query('UPDATE modification_request SET approval = False and comment = $2 WHERE request_id = $1;', [this.request_id, this.comment]);
+            const res = await pool.query('SELECT booking_id from modification_request WHERE request_id=$1;', [this.request_id]);
+            const bid = res.rows[0].booking_id;
+            await pool.query('UPDATE booking SET cancelled = True WHERE booking_id = $1;', [bid]);
+            await pool.query('COMMIT;')
+        } catch (e) {
+            await pool.query('ROLLBACK;');
+            throw e;
+        }
+    }
+
+    async reject_modif_request() {
+        try {
+            await pool.query('UPDATE modification_request SET approval = False and comment = $2 WHERE request_id = $1;', [this.request_id, this.comment]);
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    async view_cancel_requests() {
+        try{
+            const res = await pool.query('SELECT person_id FROM person where email_id = $1;', [this.email]);
+            const hid = res.rows[0].person_id;
+            return pool.query("SELECT request_id, b.booking_id as booking_id, bd.building_id as building_id, building_name, room_no, TO_CHAR(time_stamp, 'dd/mm/yyyy'), TO_CHAR(start_date, 'dd/mm/yyyy'), TO_CHAR(end_date, 'dd/mm/yyyy'), location_point, bd.addr as addr, name, email_id, phone_number FROM modification_request as m, booking as b, building as bd, person as p WHERE m.cancelled = True AND m.booking_id = b.booking_id AND b.building_id = bd.building_id AND bd.hostel_owner_id=$1 AND b.customer_id=p.person_id ORDER BY time_stamp desc;", [hid]);
+        } catch (e){
+            throw e;
+        }
+    }
+    async accept_cancel_request() {
+        try {
+            await pool.query('BEGIN;');
+            await pool.query('UPDATE modification_request SET approval = False and comment = $2 WHERE request_id = $1;', [this.request_id, this.comment]);
+            const res = await pool.query('SELECT booking_id from modification_request WHERE request_id=$1;', [this.request_id]);
+            const bid = res.rows[0].booking_id;
+            await pool.query('UPDATE booking SET cancelled = True WHERE booking_id = $1;', [bid]);
+            await pool.query('COMMIT;')
+        } catch (e) {
+            await pool.query('ROLLBACK;');
+            throw e;
+        }
+    }
+    async reject_cancel_request() {
+        try {
+            await pool.query('UPDATE modification_request SET approval = False and comment = $2 WHERE request_id = $1;', [this.request_id, this.comment]);
+        } catch (e) {
+            throw e;
+        }
+    }
 }
