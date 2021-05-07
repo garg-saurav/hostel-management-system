@@ -41,10 +41,10 @@ exports.post_book_room = async (req, res, next) => {
     const check_in_date = req.body.check_in_date;
     const check_out_date = req.body.check_out_date;
     const room_no = req.body.room_no;
-    const guests = req.body.guests;
+    const guests = JSON.parse(req.body.guests);
     var services = req.body.services;
 
-    console.log(guests, services);
+    console.log(services);
 
     if (!Array.isArray(services)) {
         services = [].concat(services);
